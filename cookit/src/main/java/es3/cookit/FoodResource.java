@@ -1,4 +1,4 @@
-package es3.cookit.resource;
+package es3.cookit;
 
 import java.util.List;
 

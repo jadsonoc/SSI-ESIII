@@ -1,0 +1,85 @@
+package es3.cookit.entities;
+
+import java.time.LocalTime;
+import java.util.List;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+
+@Entity
+@Table(name="ckt_recipe")
+public class Recipe extends PanacheEntity {
+    
+    @Column
+    @NotEmpty
+    private String name;
+
+    @Column
+    @NotEmpty
+    private String preparation;
+
+    @Column
+    private LocalTime time;
+
+    @Column
+    private int serve;
+
+    @Column
+    private int difficulty;
+
+    @OneToMany
+    private List<Ingredient> ingredients;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPreparation() {
+        return preparation;
+    }
+
+    public void setPreparation(String preparation) {
+        this.preparation = preparation;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
+
+    public int getServe() {
+        return serve;
+    }
+
+    public void setServe(int serve) {
+        this.serve = serve;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+}
