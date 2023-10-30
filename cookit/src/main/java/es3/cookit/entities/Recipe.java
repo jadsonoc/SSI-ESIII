@@ -1,11 +1,14 @@
 package es3.cookit.entities;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -23,7 +26,7 @@ public class Recipe extends PanacheEntity {
     private String preparation;
 
     @Column
-    private LocalTime time;
+    private String time;
 
     @Column
     private int serve;
@@ -31,8 +34,23 @@ public class Recipe extends PanacheEntity {
     @Column
     private int difficulty;
 
-    @OneToMany
-    private List<Ingredient> ingredients;
+    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Ingredient> ingredients = new ArrayList<>();
+
+    public Recipe() {
+        
+    }
+
+    public Recipe(@NotEmpty String name, @NotEmpty String preparation, String time, int serve, int difficulty,
+            List<Ingredient> ingredients) {
+        this.name = name;
+        this.preparation = preparation;
+        this.time = time;
+        this.serve = serve;
+        this.difficulty = difficulty;
+        this.ingredients = ingredients;
+    }
 
     public String getName() {
         return name;
@@ -50,11 +68,11 @@ public class Recipe extends PanacheEntity {
         this.preparation = preparation;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

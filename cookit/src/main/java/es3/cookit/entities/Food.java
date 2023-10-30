@@ -4,7 +4,6 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -26,8 +25,19 @@ public class Food extends PanacheEntity {
     private boolean oilseedFree;
 
     @Column
-    @OneToMany
-    private FoodUnit foodUnit;
+    private String foodUnit;
+
+    public Food() {
+        
+    }
+
+    public Food(@NotEmpty String name, boolean lactoseFree, boolean glutenFree, boolean oilseedFree, String foodUnit) {
+        this.name = name;
+        this.lactoseFree = lactoseFree;
+        this.glutenFree = glutenFree;
+        this.oilseedFree = oilseedFree;
+        this.foodUnit = foodUnit;
+    }
 
     public String getName() {
         return name;
@@ -61,12 +71,14 @@ public class Food extends PanacheEntity {
         this.oilseedFree = oilseedFree;
     }
 
-    public FoodUnit getFoodUnit() {
+    public String getFoodUnit() {
         return foodUnit;
     }
 
-    public void setFoodUnit(FoodUnit foodUnit) {
+    public void setFoodUnit(String foodUnit) {
         this.foodUnit = foodUnit;
     }
+
+    
 
 }

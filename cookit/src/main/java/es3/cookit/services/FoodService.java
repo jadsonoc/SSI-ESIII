@@ -7,8 +7,6 @@ import es3.cookit.dto.FoodDto;
 import es3.cookit.entities.Food;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 
 @ApplicationScoped
 public class FoodService {
@@ -22,6 +20,10 @@ public class FoodService {
         Food food = new Food();
 
         food.setName(dto.getName());
+        food.setGlutenFree(dto.isGlutenFree());
+        food.setLactoseFree(dto.isLactoseFree());
+        food.setOilseedFree(dto.isOilseedFree());
+        food.setFoodUnit(dto.getFoodUnit());
 
         food.persist();
 
@@ -61,7 +63,7 @@ public class FoodService {
         if (foodOptional.isEmpty()) {
             throw new NullPointerException("Food Not Found!");
         }
-        
+
         Food food = foodOptional.get();
 
         food.delete();

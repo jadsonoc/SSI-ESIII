@@ -3,18 +3,15 @@ package es3.cookit.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="ckt_ingredients")
 public class Ingredient extends PanacheEntity {
-    
-    @ManyToMany
-    private Recipe recipe;
 
-    @ManyToMany
+    @ManyToOne
     private Food food;
 
     @Column
@@ -24,12 +21,14 @@ public class Ingredient extends PanacheEntity {
     @Column
     private boolean required;
 
-    public Recipe getRecipe() {
-        return recipe;
+    public Ingredient() {
+        
     }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public Ingredient(Food food, @NotEmpty float quantity, boolean required) {
+        this.food = food;
+        this.quantity = quantity;
+        this.required = required;
     }
 
     public Food getFood() {

@@ -17,4 +17,10 @@ public class FoodUnit extends PanacheEntity{
     @Column
     @NotEmpty
     private String abbreviation;
+
+    public FoodUnit(@NotEmpty String name, @NotEmpty String abbreviation) {
+        this.name = name;
+        this.abbreviation = abbreviation;
+    }
+
 }
