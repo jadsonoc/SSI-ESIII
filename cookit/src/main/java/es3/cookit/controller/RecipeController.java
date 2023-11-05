@@ -2,7 +2,6 @@ package es3.cookit.controller;
 
 import java.util.List;
 
-import es3.cookit.dto.IngredientDto;
 import es3.cookit.dto.RecipeDto;
 import es3.cookit.entities.Recipe;
 import es3.cookit.services.RecipeService;

@@ -1,13 +1,9 @@
 package es3.cookit.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import es3.cookit.dto.FoodDto;
-import es3.cookit.dto.IngredientDto;
 import es3.cookit.dto.RecipeDto;
-import es3.cookit.entities.Ingredient;
 import es3.cookit.entities.Recipe;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;

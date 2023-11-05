@@ -45,17 +45,6 @@ public class FoodService {
         food.persist();
     }
 
-    // public Food update(Long id, Food food) {
-    //     Food foodEntity = Food.findById(id);
-
-    //     if (foodEntity == null) {
-    //         throw new WebApplicationException("Food with id of " + id + "doesn't exist.", Response.Status.NOT_FOUND);
-    //     }
-
-    //     foodEntity.setName(food.getName());
-    //     return foodEntity;
-
-    // }
 
     @Transactional
     public void removeFood(Long id) {

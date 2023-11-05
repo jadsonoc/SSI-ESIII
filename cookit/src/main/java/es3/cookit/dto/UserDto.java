@@ -1,64 +1,30 @@
-package es3.cookit.entities;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+package es3.cookit.dto;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import es3.cookit.entities.Recipe;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 
-@NamedQueries({
-    @NamedQuery(name = "User.findByName", query = "from User where name = ?1")
-})
-
-@Entity
-@Table(name = "ckt_user")
-public class User extends PanacheEntity {
-   
-    @Column 
+public class UserDto {
+    
     private String name;
 
-    @Column
     private boolean lactoseIntolerant;
 
-    @Column
     private boolean glutenIntolerant;
 
-    @Column
     private boolean oilseedsIntolerant;
 
-    @Column
     private Date lastLogin;
 
-    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Recipe> favouritedRecipes = new ArrayList<>();
 
-    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.ALL,
-    fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Recipe> preparedRecipes = new ArrayList<>();
-
-    public User() {
-    }
-
-    public User(String name, boolean lactoseIntolerant, boolean glutenIntolerant, boolean oilseedsIntolerant,
-            Date lastLogin, List<Recipe> favouritedRecipes, List<Recipe> preparedRecipes) {
-        this.name = name;
-        this.lactoseIntolerant = lactoseIntolerant;
-        this.glutenIntolerant = glutenIntolerant;
-        this.oilseedsIntolerant = oilseedsIntolerant;
-        this.lastLogin = lastLogin;
-        this.favouritedRecipes = favouritedRecipes;
-        this.preparedRecipes = preparedRecipes;
-    }
 
     public String getName() {
         return name;
@@ -116,8 +82,5 @@ public class User extends PanacheEntity {
         this.preparedRecipes = preparedRecipes;
     }
 
-    public static User findByName(String name) {
-        return find("#User.findByName", name).firstResult();
-    }
-  
+    
 }

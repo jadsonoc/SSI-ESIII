@@ -1,6 +1,5 @@
 package es3.cookit.entities;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
