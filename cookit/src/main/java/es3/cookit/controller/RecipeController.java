@@ -2,6 +2,7 @@ package es3.cookit.controller;
 
 import java.util.List;
 
+import es3.cookit.dto.IngredientDto;
 import es3.cookit.dto.RecipeDto;
 import es3.cookit.entities.Recipe;
 import es3.cookit.services.RecipeService;
@@ -31,12 +32,18 @@ public class RecipeController {
         return Response.ok(recipes).build();
     }
 
+    @GET
+    @Path("{id}")
+    public Response listRecipe(@PathParam("id") Long id) {
+        Recipe recipe = recipeService.listRecipeById(id);
+        return Response.ok(recipe).build();
+    }
+
     @POST
     public Response saveRecipe(RecipeDto dto) {
         Recipe recipe = recipeService.saveRecipe(dto);
         return Response.ok(recipe).status(201).build();
     }
-
 
     @PUT
     @Path("{id}")
@@ -45,6 +52,12 @@ public class RecipeController {
         return Response.status(204).build();
     } 
 
+    @PUT
+    @Path("/ingredients/{id}")
+    public Response updateRecipeIngredients(@PathParam("id") Long idRecipe, List<IngredientDto> dto) {
+        recipeService.updateRecipeIngredients(idRecipe, dto);
+        return Response.status(204).build();
+    } 
 
     @DELETE
     @Path("{id}")

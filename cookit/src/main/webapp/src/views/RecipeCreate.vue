@@ -5,10 +5,11 @@
           <div class="card-header">
               <router-link 
                   class="btn btn-outline-info float-right"
-                  to="/">View All Recipes
+                  to="/recipe/list">View All Recipes
               </router-link>
           </div>
           <div class="card-body">
+            <p>{{recipe.id}}</p>
               <form>
                   <div class="form-group">
                       <label htmlFor="name">Name</label>
@@ -20,7 +21,7 @@
                           name="name"/>
                   </div>
                   <div class="form-group">
-                      <label htmlFor="preparation">Preparation</label>
+                      <label htmlFor="description">Ingredients and Preparation</label>
                       <textarea 
                           v-model="recipe.preparation"
                           class="form-control"
@@ -55,24 +56,8 @@
                           id="difficulty"
                           name="difficulty"/>
                   </div>
+                
                   <!-- INGREGIENTES AQUI -->
-                  <div id="teste">
-                    <h1>Add user</h1>
-                    <div v-for="(ingredient, index) in ingredientField" :key="index">
-                      <input v-model="ingredient.food" />
-                      <input v-model="ingredient.quantity" />
-                      <button @click="deleteIngredient(index)">
-                        delete
-                      </button>
-                    </div>
-                    
-                    <button @click="addIngredient()">
-                      New Ingredient
-                    </button>
-                    <pre>{{ $data }}</pre>
-     
-                  </div>
-
                   <button 
                       @click="handleSave()"
                       :disabled="isSaving"
@@ -80,6 +65,12 @@
                       class="btn btn-outline-primary mt-3">
                       Save Recipe
                   </button>
+                  
+                  <router-link 
+                    :to=" isSaving ?  `/recipe/ingredients/create/${recipe.id}` : ''" 
+                    class="btn btn-outline-info mx-1">
+                    Insert Ingredients
+                  </router-link>
               </form>
           </div>
       </div>
@@ -90,7 +81,7 @@
   import axios from 'axios';
   import LayoutDiv from '../components/LayoutDiv.vue';
   import Swal from 'sweetalert2'
-  
+   
   export default {
     name: 'RecipeCreate',
     components: {
@@ -99,28 +90,17 @@
     data() {
       return {
         recipe: {
+          id: '',
           name: '',
           preparation: '',
           time: '',
           serve: '',
-          difficulty: '', 
-          ingredients: [{}],
+          difficulty: '',
         },
-        ingredientField: [{ food: '', quantity: '' }],
         isSaving:false,
       };
     },
     methods: {
-      addIngredient: function () {
-          this.ingredientField.push({food: '', quantity: '' });
-      },
-      deleteIngredient: function (index) {
-        console.log(index);
-        console.log(this.ingredients);
-        this.ingredientField.splice(index, 1);
-        if(index===0)
-        this.addIngredient()
-      },
       handleSave() {
           this.isSaving = true
           axios.post('/recipes', this.recipe)
@@ -131,13 +111,14 @@
                   showConfirmButton: false,
                   timer: 1500
               })
-              this.isSaving = false
-              this.recipe.name = ""
-              this.recipe.preparation = ""
-              this.recipe.time = ""
-              this.recipe.serve = ""
-              this.recipe.difficulty = ""
-              return response
+              //this.isSaving = false
+              this.recipe.id = response.data.id;
+              this.recipe.name = "";
+              this.recipe.preparation = "";
+              this.recipe.time = "";
+              this.recipe.serve = "";
+              this.recipe.difficulty = "";
+              return response;
             })
             .catch(error => {
               this.isSaving = false
