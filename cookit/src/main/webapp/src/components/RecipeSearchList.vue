@@ -10,7 +10,9 @@
                       </router-link>
                   </div>
                   <div class="card-body">
-               {{ this.$route.params.query  }}
+               {{ this.$router.params }}
+
+               {{ response  }}
                       <table class="table table-bordered">
                           <thead>
                               <tr>
@@ -62,11 +64,12 @@
     data() {
       return {
         posts: [],
-        recipes:[]
+          recipes: [],
+        ings: [{ "id": 1, "name": "Tomate", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }, { "id": 2, "name": "Cebola", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }]
       };
     },
     created() {
-        axios.get('/recipes/mainSearchByFoods',this.$route.params.query)
+        axios.get('/recipes/mainSearchByFoods', this.ings )
           .then(response => {
             this.recipes = response.data;
             return response
@@ -74,7 +77,8 @@
           .catch(error => {
             Swal.fire({
               icon: 'error',
-              title: 'An Error Occured!',
+              //title: 'An Error Occured!',
+              title: error,
               showConfirmButton: false,
               timer: 1500
             })

@@ -30,9 +30,13 @@
                           id="difficulty"
                           name="difficulty"/>
                 <div class="input-group-append">
-                  <router-link 
-                    :to="`/recipe/search/list/${searchQuery}`" 
-                    class="btn btn-outline-info mx-1">Go!
+                  <router-link :to="{
+                      path: '/recipe/search/list/',
+                      query: { 
+                          item: `${searchQuery}`
+                      }
+                  }"
+                  class="btn btn-outline-info mx-1">Go!
                   </router-link>
                 </div>
             </div>
