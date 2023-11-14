@@ -51,4 +51,12 @@ public class FoodDto {
     public void setFoodUnit(String foodUnit) {
         this.foodUnit = foodUnit;
     }
+
+    @Override
+    public String toString() {
+        return "FoodDto [name=" + name + ", lactoseFree=" + lactoseFree + ", glutenFree=" + glutenFree
+                + ", oilseedFree=" + oilseedFree + ", foodUnit=" + foodUnit + "]";
+    }
+
+    
 }

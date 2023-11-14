@@ -20,11 +20,20 @@
         <div class="container-fluid">
             
             <img src="./img/logo2.png" class="img-fluid rounded mx-auto d-block" alt="Imagem responsiva">
-
+            {{ foods }}
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="What do you fell like eating?" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <input 
+                          v-model="searchQuery"
+                          type="text"
+                          class="form-control"
+                          placeholder="What do you fell like eating?"
+                          id="difficulty"
+                          name="difficulty"/>
                 <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Go!</button>
+                  <router-link 
+                    :to="`/recipe/search/list/${searchQuery}`" 
+                    class="btn btn-outline-info mx-1">Go!
+                  </router-link>
                 </div>
             </div>
 
@@ -59,10 +68,71 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Swal from 'sweetalert2'
+
 export default {
   name: 'HomePage',
   props: {
     msg: String
-  }
-}
+  },
+    data() {
+      return {
+        searchQuery:[{ "id": 1, "name": "Tomate", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }, { "id": 2, "name": "Cebola", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }],
+        foods: []
+      };
+    },
+    created() {
+          axios.get('/foods')
+     .then(response => {
+         let foodsInfo = response.data
+            foodsInfo.forEach(element => {
+              this.foods.push(element);
+         });
+         return response
+     })
+     .catch(error => {
+         Swal.fire({
+             icon: 'error',
+             title: 'An Error Occured Recovering Food!',
+             showConfirmButton: false,
+             timer: 1500
+         })
+         return error
+     })
+    },
+    methods: {
+      handleSearch() {
+          axios.post('/recipes', this.recipe)
+            .then(response => {
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Recipe saved successfully!',
+                  showConfirmButton: false,
+                  timer: 1500
+              })
+              //this.isSaving = false
+              //this.recipe.id = response.data.id;
+              this.recipe.name = "";
+              this.recipe.preparation = "";
+              this.recipe.time = "";
+              this.recipe.serve = "";
+              this.recipe.difficulty = "";
+              this.recipe.ingredients = [];
+              return response;
+            })
+            .catch(error => {
+              this.isSaving = false
+              Swal.fire({
+                  icon: 'error',
+                  title: 'An Error Occured!',
+                  showConfirmButton: false,
+                  timer: 1500
+              })
+              return error
+            });
+      },
+    },
+  };
+
 </script>

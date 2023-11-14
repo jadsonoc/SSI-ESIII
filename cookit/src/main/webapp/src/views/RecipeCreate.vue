@@ -9,7 +9,6 @@
               </router-link>
           </div>
           <div class="card-body">
-            <p>{{recipe.id}}</p>
               <form>
                   <div class="form-group">
                       <label htmlFor="name">Name</label>
@@ -21,7 +20,7 @@
                           name="name"/>
                   </div>
                   <div class="form-group">
-                      <label htmlFor="description">Ingredients and Preparation</label>
+                      <label htmlFor="description">Preparation</label>
                       <textarea 
                           v-model="recipe.preparation"
                           class="form-control"
@@ -58,6 +57,38 @@
                   </div>
                 
                   <!-- INGREGIENTES AQUI -->
+                  <label>Ingredients</label>
+                  <div class="form-group row" v-for="(input, index) in recipe.ingredients" :key="index">
+                  <div class="col-lg-6">
+                    <select v-model="input.food" type="text" :name="'ingredient[' + index + '][food]'" class="form-control" placeholder="Ingredient Food">
+                      <option disabled value="">Please select one Ingredient</option>
+                        <option v-for="food in foods" :key="food.id" :value="food">{{ food.name }}</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-2">
+                    <input v-model="input.quantity" type="number" :name="'ingredient[' + index + '][quantity]'" class="form-control" placeholder="Quantity">
+                  </div>
+                  <div class="col-lg-1">
+                    <input v-model="input.required" type="checkbox" :name="'ingredient[' + index + '][requrired]'" class="" placeholder="Ingredient Required">
+                    <label for="checkbox">{{ input.required }}</label>
+                  </div>
+                  <div class="col-lg-1">
+                    <button type="button" @click="deleteRow(index)" class="btn btn-outline-danger rounded-circle">
+                      <i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                  <div class="form-group row">
+                    <div class="col-lg-12">
+                      <button type="button" @click="addRow" class="btn btn-outline-secondary">Add Row</button>
+                    </div>
+                  </div>
+
+
+
+
+
+                  <!-- FIM DE INGREDIENTES -->
                   <button 
                       @click="handleSave()"
                       :disabled="isSaving"
@@ -66,11 +97,6 @@
                       Save Recipe
                   </button>
                   
-                  <router-link 
-                    :to=" isSaving ?  `/recipe/ingredients/create/${recipe.id}` : ''" 
-                    class="btn btn-outline-info mx-1">
-                    Insert Ingredients
-                  </router-link>
               </form>
           </div>
       </div>
@@ -96,11 +122,63 @@
           time: '',
           serve: '',
           difficulty: '',
+          ingredients: [
+            {
+              food: '',
+              quantity: '',
+              required: false  
+            },
+            {
+              food: '',
+              quantity: '',
+              required: false  
+            },
+            {
+              food: '',
+              quantity: '',
+              required: false  
+            },
+            {
+              food: '',
+              quantity: '',
+              required: false  
+            }
+          ],
         },
+        foods: [],
         isSaving:false,
       };
     },
+    created() {
+          axios.get('/foods')
+     .then(response => {
+         let foodsInfo = response.data
+            foodsInfo.forEach(element => {
+              this.foods.push(element);
+         });
+         return response
+     })
+     .catch(error => {
+         Swal.fire({
+             icon: 'error',
+             title: 'An Error Occured Recovering Food!',
+             showConfirmButton: false,
+             timer: 1500
+         })
+         return error
+     })
+    },
     methods: {
+      addRow() {
+          this.recipe.ingredients.push({
+        food: "",
+        quantity: "",
+        required: ""
+      });
+    },
+    deleteRow(index) {
+      this.recipe.ingredients.splice(index, 1);
+    },
       handleSave() {
           this.isSaving = true
           axios.post('/recipes', this.recipe)
@@ -112,12 +190,13 @@
                   timer: 1500
               })
               //this.isSaving = false
-              this.recipe.id = response.data.id;
+              //this.recipe.id = response.data.id;
               this.recipe.name = "";
               this.recipe.preparation = "";
               this.recipe.time = "";
               this.recipe.serve = "";
               this.recipe.difficulty = "";
+              this.recipe.ingredients = [];
               return response;
             })
             .catch(error => {

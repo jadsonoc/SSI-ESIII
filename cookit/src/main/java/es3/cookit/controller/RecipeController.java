@@ -2,6 +2,7 @@ package es3.cookit.controller;
 
 import java.util.List;
 
+import es3.cookit.dto.FoodDto;
 import es3.cookit.dto.IngredientDto;
 import es3.cookit.dto.RecipeDto;
 import es3.cookit.entities.Recipe;
@@ -38,6 +39,13 @@ public class RecipeController {
         Recipe recipe = recipeService.listRecipeById(id);
         return Response.ok(recipe).build();
     }
+
+    @GET
+    @Path("/mainSearchByFoods")
+    public Response searchRecipeByFoods(List<FoodDto> dto) {
+        List<Recipe> recipes = recipeService.searchRecipeByFoods(dto);
+        return Response.ok(recipes).build();
+    } 
 
     @POST
     public Response saveRecipe(RecipeDto dto) {

@@ -30,7 +30,7 @@ public class Food extends PanacheEntity {
         
     }
 
-    public Food(@NotEmpty String name, boolean lactoseFree, boolean glutenFree, boolean oilseedFree, String foodUnit) {
+    public Food(String name, boolean lactoseFree, boolean glutenFree, boolean oilseedFree, String foodUnit) {
         this.name = name;
         this.lactoseFree = lactoseFree;
         this.glutenFree = glutenFree;
