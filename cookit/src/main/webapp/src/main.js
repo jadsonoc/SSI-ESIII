@@ -29,7 +29,7 @@ const router = createRouter({
     history: createWebHistory(),
   routes: [
       { path: '/', component: HomePage },
-      { path: '/recipe/search/list/', component: RecipeSearchList },
+      { path: '/recipe/search/list/:query', component: RecipeSearchList },
       { path: '/recipe/list', component: RecipeList },
       { path: '/recipe/create', component: RecipeCreate },
       { path: '/recipe/ingredients/create/:id', component: RecipeIngredients },

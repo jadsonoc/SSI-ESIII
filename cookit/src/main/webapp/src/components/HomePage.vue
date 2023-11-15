@@ -1,142 +1,125 @@
 <template lang="html">
-  <!-- Só uma imagem -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-        <img src="./img/logo2_mini.png" alt="" width="90" height="30">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Alterna navegação">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-          <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(Página atual)</span></a>
-              <a class="nav-item nav-link" href="/recipe/list">Receitas</a>
-              <a class="nav-item nav-link" href="#">Ingredientes</a>
-              <a class="nav-item nav-link disabled" href="#">Log In</a>
-            </div>
-          </div>
-    </nav>
-    <div class="d-flex align-content-center flex-wrap">
-        <div class="container-fluid">
-            
-            <img src="./img/logo2.png" class="img-fluid rounded mx-auto d-block" alt="Imagem responsiva">
-            {{ foods }}
-            <div class="input-group mb-3">
-                <input 
-                          v-model="searchQuery"
-                          type="text"
-                          class="form-control"
-                          placeholder="What do you fell like eating?"
-                          id="difficulty"
-                          name="difficulty"/>
-                <div class="input-group-append">
-                  <router-link :to="{
-                      path: '/recipe/search/list/',
-                      query: { 
-                          item: `${searchQuery}`
-                      }
-                  }"
-                  class="btn btn-outline-info mx-1">Go!
-                  </router-link>
-                </div>
-            </div>
 
-        </div>
-    </div>
-    <div class="card-deck">
-        <div class="card">
-          <img class="card-img-top" src="./img/number1.png" alt="Imagem de capa do card">
-          <div class="card-body">
-            <h5 class="card-title">Título do card</h5>
-            <p class="card-text">Este é um card mais longo com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional. Este conteúdo é um pouco maior.</p>
-            <p class="card-text"><small class="text-muted">Atualizados 3 minutos atrás</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="./img/number2.png" alt="Imagem de capa do card">
-          <div class="card-body">
-            <h5 class="card-title">Título do card</h5>
-            <p class="card-text">Este é um card com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional.</p>
-            <p class="card-text"><small class="text-muted">Atualizados 3 minutos atrás</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="./img/number3.png" alt="Imagem de capa do card">
-          <div class="card-body">
-            <h5 class="card-title">Título do card</h5>
-            <p class="card-text">Este é um card maior com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional. Este card tem o conteúdo ainda maior que o primeiro, para mostrar a altura igual, em ação.</p>
-            <p class="card-text"><small class="text-muted">Atualizados 3 minutos atrás</small></p>
-          </div>
+  <NavMenu />
+  
+  <div class="d-flex align-content-center flex-wrap">
+    <div class="container-fluid">
+      <img src="../assets/img/logo2.png" class="img-fluid rounded mx-auto d-block" alt="Imagem responsiva">
+      {{ selectedItems }}
+      <div class="input-group mb-3">
+        <vue3-tags-input v-model:tags="tags"
+          v-model="tag"
+          :select="true"
+          :select-items="foods"
+          @on-select="handleSelectedTag"
+          @on-tags-changed="handleChangeTag"
+          placeholder="Select the Ingredients">
+          <template #item="{ tag }">
+            {{ tag.name }}
+          </template>
+          <template #no-data>
+            No Data
+          </template>
+          <template #select-item="tag">
+            {{ tag.name }}
+          </template>
+        </vue3-tags-input>
+
+        <div class="input-group-append">
+          <router-link 
+            :to="`/recipe/search/list/${JSON.stringify(selectedItems)}`"
+            class="btn btn-outline-info mx-1">Go
+          </router-link>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- INICIO CARD DECK -->
+  <div class="card-deck">
+    <div class="card">
+      <img class="card-img-top" src="../assets/img/number1.png" alt="Imagem de capa do card">
+      <div class="card-body">
+        <h5 class="card-title">Título do card</h5>
+        <p class="card-text">Este é um card mais longo com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional. Este conteúdo é um pouco maior.</p>
+        <p class="card-text"><small class="text-muted">Atualizados 3 minutos atrás</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" src="../assets/img/number2.png" alt="Imagem de capa do card">
+      <div class="card-body">
+        <h5 class="card-title">Título do card</h5>
+        <p class="card-text">Este é um card com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional.</p>
+        <p class="card-text"><small class="text-muted">Atualizados 3 minutos atrás</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" src="../assets/img/number3.png" alt="Imagem de capa do card">
+      <div class="card-body">
+        <h5 class="card-title">Título do card</h5>
+        <p class="card-text">Este é um card maior com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional. Este card tem o conteúdo ainda maior que o primeiro, para mostrar a altura igual, em ação.</p>
+        <p class="card-text"><small class="text-muted">Atualizados 3 minutos atrás</small></p>
+      </div>
+    </div>
+  </div>
+  <!-- FIM CARD DECK -->
 </template>
 
 <script>
-import axios from 'axios';
-import Swal from 'sweetalert2'
+  import NavMenu from './NavMenu.vue' 
+  import axios from 'axios';
+  import Swal from 'sweetalert2'
+  import Vue3TagsInput from 'vue3-tags-input';
 
-export default {
-  name: 'HomePage',
-  props: {
-    msg: String
-  },
+  export default {
+    name: 'HomePage',
+    props: {
+    },
+    components: {
+      NavMenu,
+      Vue3TagsInput
+    },
     data() {
       return {
-        searchQuery:[{ "id": 1, "name": "Tomate", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }, { "id": 2, "name": "Cebola", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }],
-        foods: []
-      };
+        tag: '',
+        tags: [],
+        selectedItems: [],
+        foods: [],
+        };
     },
     created() {
-          axios.get('/foods')
-     .then(response => {
-         let foodsInfo = response.data
-            foodsInfo.forEach(element => {
-              this.foods.push(element);
-         });
-         return response
-     })
-     .catch(error => {
-         Swal.fire({
-             icon: 'error',
-             title: 'An Error Occured Recovering Food!',
-             showConfirmButton: false,
-             timer: 1500
-         })
-         return error
-     })
-    },
-    methods: {
-      handleSearch() {
-          axios.post('/recipes', this.recipe)
-            .then(response => {
-              Swal.fire({
-                  icon: 'success',
-                  title: 'Recipe saved successfully!',
-                  showConfirmButton: false,
-                  timer: 1500
-              })
-              //this.isSaving = false
-              //this.recipe.id = response.data.id;
-              this.recipe.name = "";
-              this.recipe.preparation = "";
-              this.recipe.time = "";
-              this.recipe.serve = "";
-              this.recipe.difficulty = "";
-              this.recipe.ingredients = [];
+      axios.get('/foods')
+           .then(response => {
+              let foodsInfo = response.data;
+                  foodsInfo.forEach(element => {
+                    this.foods.push(element);
+                  });
               return response;
-            })
-            .catch(error => {
-              this.isSaving = false
+          })
+          .catch(error => {
               Swal.fire({
                   icon: 'error',
-                  title: 'An Error Occured!',
+                  title: 'An Error Occured Recovering Food!',
                   showConfirmButton: false,
                   timer: 1500
               })
               return error
-            });
+          })
+    },
+    methods: {
+      handleSelectedTag(tag) {
+        this.selectedItems.push(tag);
+        this.tags.push(tag);
       },
+      handleChangeTag(tags) {
+        this.selectedItems = tags;
+        let uniqueTags = tags.filter((elem, pos, self) => {
+          return self.indexOf(elem) == pos;
+        });
+        this.tags = uniqueTags;
+        
+      },
+
     },
   };
-
 </script>

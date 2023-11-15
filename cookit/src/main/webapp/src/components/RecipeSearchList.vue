@@ -4,15 +4,12 @@
               <h2 class="text-center mt-5 mb-3">Recipe Manager</h2>
               <div class="card">
                   <div class="card-header">
-                      <router-link to="/recipe/create"
+                      <router-link to="/"
                           class="btn btn-outline-primary"
-                          >Create New Recipe
+                          >Home
                       </router-link>
                   </div>
                   <div class="card-body">
-               {{ this.$router.params }}
-
-               {{ response  }}
                       <table class="table table-bordered">
                           <thead>
                               <tr>
@@ -34,12 +31,6 @@
                                   <td>{{recipe.difficulty}}</td>
                                   <td>
                                       <router-link :to="`/show/${recipe.id}`" class="btn btn-outline-info mx-1">Show</router-link>
-                                      <router-link :to="`/edit/${recipe.id}`" class="btn btn-outline-success mx-1">Edit</router-link>
-                                      <button 
-                                          @click="handleDelete(recipe.id)"
-                                          className="btn btn-outline-danger mx-1">
-                                          Delete
-                                      </button>
                                   </td>
                               </tr>
                                    
@@ -65,13 +56,21 @@
       return {
         posts: [],
           recipes: [],
-        ings: [{ "id": 1, "name": "Tomate", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }, { "id": 2, "name": "Cebola", "lactoseFree": true, "glutenFree": true, "oilseedFree": true, "foodUnit": "Unidde" }]
+          ingredients: [],
       };
     },
     created() {
-        axios.get('/recipes/mainSearchByFoods', this.ings )
+      const param = JSON.parse(this.$route.params.query);
+      param.forEach(ingredient => {
+        console.log(ingredient);
+        this.ingredients.push(ingredient);
+      });
+        axios.post('/recipes/mainSearchByFoods', this.ings2 )
           .then(response => {
-            this.recipes = response.data;
+            let recipesInfo = response.data
+            recipesInfo.forEach(element => {
+              this.recipes.push(element);
+            });
             return response
           })
           .catch(error => {
@@ -84,52 +83,6 @@
             })
             return error
           });
-    },
-    methods: {
-        fetchRecipesList() {
-        axios.get('/recipes')
-          .then(response => {
-              this.recipes = response.data;
-              return response
-          })
-          .catch(error => {
-            return error
-          });
-      },
-      handleDelete(id){
-          Swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                  axios.delete(`/recipes/${id}`)
-                  .then( response => {
-                      Swal.fire({
-                          icon: 'success',
-                          title: 'Recipe deleted successfully!',
-                          showConfirmButton: false,
-                          timer: 1500
-                      })
-                      this.fetchRecipesList();
-                      return response
-                  })
-                  .catch(error => {
-                      Swal.fire({
-                           icon: 'error',
-                          title: 'An Error Occured!',
-                          showConfirmButton: false,
-                          timer: 1500
-                      })
-                      return error
-                  });
-              }
-            })
-      }
     },
   };
   </script>

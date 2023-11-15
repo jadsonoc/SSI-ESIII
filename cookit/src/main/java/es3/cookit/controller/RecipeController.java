@@ -40,7 +40,7 @@ public class RecipeController {
         return Response.ok(recipe).build();
     }
 
-    @GET
+    @POST
     @Path("/mainSearchByFoods")
     public Response searchRecipeByFoods(List<FoodDto> dto) {
         List<Recipe> recipes = recipeService.searchRecipeByFoods(dto);
