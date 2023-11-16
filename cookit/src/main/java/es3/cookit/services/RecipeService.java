@@ -126,6 +126,7 @@ public class RecipeService {
         recipe.setServe(dto.getServe());
         recipe.setTime(dto.getTime());
         recipe.setDifficulty(dto.getDifficulty());
+        recipe.setIngredients(dto.getIngredients());
         recipe.persist();
     }
 

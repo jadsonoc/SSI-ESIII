@@ -1,12 +1,12 @@
 <template>
     <layout-div>
           <div class="container">
-              <h2 class="text-center mt-5 mb-3">Recipe Manager</h2>
+              <h2 class="text-center mt-5 mb-3">Recipe Suggestions</h2>
               <div class="card">
                   <div class="card-header">
                       <router-link to="/"
                           class="btn btn-outline-primary"
-                          >Home
+                          >Go back to Home
                       </router-link>
                   </div>
                   <div class="card-body">

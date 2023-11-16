@@ -33,7 +33,7 @@ public class Recipe extends PanacheEntity {
     @Column
     private int difficulty;
 
-    @OneToMany (targetEntity = Ingredient.class, cascade = CascadeType.ALL,
+    @OneToMany (targetEntity = Ingredient.class, cascade = CascadeType.REMOVE,
                 fetch = FetchType.EAGER)
     private List<Ingredient> ingredients = new ArrayList<>();
 

@@ -13,8 +13,8 @@ import RecipeSearchList from './components/RecipeSearchList';
 import RecipeList from './views/RecipeList';
 import RecipeCreate from './views/RecipeCreate';
 import RecipeIngredients from './views/RecipeIngredients';
-import ProjectEdit from './views/ProjectEdit';
-import ProjectShow from './views/ProjectShow';
+import RecipeEdit from './views/RecipeEdit';
+import RecipeShow from './views/RecipeShow';
 dom.watch();
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
@@ -33,8 +33,8 @@ const router = createRouter({
       { path: '/recipe/list', component: RecipeList },
       { path: '/recipe/create', component: RecipeCreate },
       { path: '/recipe/ingredients/create/:id', component: RecipeIngredients },
-      { path: '/edit/:id', component: ProjectEdit },
-      { path: '/show/:id', component: ProjectShow },
+      { path: '/recipe/edit/:id', component: RecipeEdit },
+      { path: '/recipe/show/:id', component: RecipeShow },
     ],
 });
   
