@@ -8,7 +8,6 @@
           <router-link to="/food/create" class="btn btn-outline-primary"
             >Create New Food Ingredient
           </router-link>
-
         </div>
         <div class="card-body">
           <table class="table table-bordered">
@@ -97,6 +96,9 @@ export default {
         .get("/foods")
         .then((response) => {
           this.foods = response.data;
+          this.foods.sort((a, b) => {
+            return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+          });
           return response;
         })
         .catch((error) => {
