@@ -4,6 +4,7 @@ import java.util.List;
 
 import es3.cookit.dto.FoodDto;
 import es3.cookit.entities.Food;
+import es3.cookit.entities.Recipe;
 import es3.cookit.services.FoodService;
 
 import jakarta.inject.Inject;
@@ -30,6 +31,13 @@ public class FoodController {
     public Response listFoods() {
         List<Food> foods = foodService.listFood();
         return Response.ok(foods).build();
+    }
+
+    @GET
+    @Path("{id}")
+    public Response listFood(@PathParam("id") Long id) {
+        Food food = foodService.listFoodById(id);
+        return Response.ok(food).build();
     }
 
     @POST

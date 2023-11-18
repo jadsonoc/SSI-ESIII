@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import es3.cookit.dto.FoodDto;
 import es3.cookit.entities.Food;
+import es3.cookit.entities.Recipe;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -13,6 +14,10 @@ public class FoodService {
 
     public List<Food> listFood() {
         return Food.listAll();
+    }
+
+    public Food listFoodById(Long id) {
+        return Food.findById(id);
     }
     
     @Transactional
@@ -42,6 +47,10 @@ public class FoodService {
 
         food = foodOptional.get();
         food.setName(dto.getName());
+        food.setGlutenFree(dto.isGlutenFree());
+        food.setLactoseFree(dto.isLactoseFree());
+        food.setOilseedFree(dto.isOilseedFree());
+        food.setFoodUnit(dto.getFoodUnit());
         food.persist();
     }
 

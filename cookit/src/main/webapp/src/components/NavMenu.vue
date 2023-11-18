@@ -23,7 +23,7 @@
           >Home <span class="sr-only">(Página atual)</span></a
         >
         <a class="nav-item nav-link" href="/recipe/list">Receitas</a>
-        <a class="nav-item nav-link" href="#">Ingredientes</a>
+        <a class="nav-item nav-link" href="/food/list">Ingredientes</a>
         <a class="nav-item nav-link disabled" href="#">Log In</a>
       </div>
     </div>

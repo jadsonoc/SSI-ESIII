@@ -15,6 +15,9 @@ import RecipeCreate from './views/RecipeCreate';
 import RecipeIngredients from './views/RecipeIngredients';
 import RecipeEdit from './views/RecipeEdit';
 import RecipeShow from './views/RecipeShow';
+import FoodList from './views/FoodList';
+import FoodCreate from './views/FoodCreate';
+import FoodEdit from './views/FoodEdit';
 dom.watch();
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
@@ -26,18 +29,21 @@ axios.interceptors.request.use(function (config) {
 */
 
 const router = createRouter({
-    history: createWebHistory(),
+  history: createWebHistory(),
   routes: [
-      { path: '/', component: HomePage },
-      { path: '/recipe/search/list/:query', component: RecipeSearchList },
-      { path: '/recipe/list', component: RecipeList },
-      { path: '/recipe/create', component: RecipeCreate },
-      { path: '/recipe/ingredients/create/:id', component: RecipeIngredients },
-      { path: '/recipe/edit/:id', component: RecipeEdit },
-      { path: '/recipe/show/:id', component: RecipeShow },
-    ],
+    { path: '/', component: HomePage },
+    { path: '/recipe/search/list/:query', component: RecipeSearchList },
+    { path: '/recipe/list', component: RecipeList },
+    { path: '/recipe/create', component: RecipeCreate },
+    { path: '/recipe/ingredients/create/:id', component: RecipeIngredients },
+    { path: '/recipe/edit/:id', component: RecipeEdit },
+    { path: '/recipe/show/:id', component: RecipeShow },
+    { path: '/food/list', component: FoodList },
+    { path: '/food/create', component: FoodCreate },
+    { path: '/food/edit/:id', component: FoodEdit },
+  ],
 });
-  
+
 library.add(fas, far, fab);
 
 createApp(App)
