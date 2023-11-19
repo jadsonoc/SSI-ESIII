@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import VueCookies from 'vue-cookies';
 import axios from "axios";
 import NavMenu from "../components/NavMenu.vue";
 import LayoutDiv from "../components/LayoutDiv.vue";
@@ -75,6 +76,8 @@ export default {
   },
   created() {
     this.fetchRecipesList();
+    if (VueCookies.isKey('userId'))
+            console.log(VueCookies.get('userId'));
   },
   methods: {
     fetchRecipesList() {

@@ -16,7 +16,8 @@ import java.util.List;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @NamedQueries({
-    @NamedQuery(name = "User.findByName", query = "from User where name = ?1")
+    @NamedQuery(name = "User.findByName", query = "from User where name = ?1"),
+    @NamedQuery(name = "User.findByEmail", query = "from User where email = ?1")
 })
 
 @Entity
@@ -25,6 +26,9 @@ public class User extends PanacheEntity {
    
     @Column 
     private String name;
+
+    @Column 
+    private String email;
 
     @Column
     private boolean lactoseIntolerant;
@@ -38,20 +42,22 @@ public class User extends PanacheEntity {
     @Column
     private Date lastLogin;
 
-    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.REMOVE,
+                fetch = FetchType.EAGER)
     private List<Recipe> favouritedRecipes = new ArrayList<>();
 
-    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.ALL,
-    fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.REMOVE,
+                fetch = FetchType.EAGER)
     private List<Recipe> preparedRecipes = new ArrayList<>();
 
     public User() {
+    
     }
 
-    public User(String name, boolean lactoseIntolerant, boolean glutenIntolerant, boolean oilseedsIntolerant,
-            Date lastLogin, List<Recipe> favouritedRecipes, List<Recipe> preparedRecipes) {
+    public User(String name, String email, boolean lactoseIntolerant, boolean glutenIntolerant,
+            boolean oilseedsIntolerant, Date lastLogin, List<Recipe> favouritedRecipes, List<Recipe> preparedRecipes) {
         this.name = name;
+        this.email = email;
         this.lactoseIntolerant = lactoseIntolerant;
         this.glutenIntolerant = glutenIntolerant;
         this.oilseedsIntolerant = oilseedsIntolerant;
@@ -66,6 +72,15 @@ public class User extends PanacheEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isLactoseIntolerant() {
@@ -116,8 +131,13 @@ public class User extends PanacheEntity {
         this.preparedRecipes = preparedRecipes;
     }
 
+
     public static User findByName(String name) {
         return find("#User.findByName", name).firstResult();
     }
-  
+
+    public static User findByEmail(String email) {
+        return find("#User.findByEmail", email).firstResult();
+    }
+
 }

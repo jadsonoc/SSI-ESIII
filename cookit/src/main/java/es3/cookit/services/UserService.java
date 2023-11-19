@@ -9,15 +9,21 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class UserService {
 
+    public User listUserById(Long id) {
+        return User.findById(id);
+    }
+
     @Transactional
-    public User logginUser(String name) {
+    public User logginUser(UserDto dto) {
         User user = new User();
 
-        if(User.findByName(name) != null) {
-            Optional<User> userOptional = user.findByIdOptional(User.findByName(name).id);
+        if (User.findByEmail(dto.getEmail()) != null) {
+            Optional<User> userOptional = user.findByIdOptional(User.findByEmail(dto.getEmail()).id);
             user = userOptional.get();
+            System.out.println(user);
         } else {
-            user.setName(name);
+            user.setEmail(dto.getEmail());
+            user.setName(dto.getName());
         }
         user.setLastLogin(new java.sql.Date(new java.util.Date().getTime()));
         user.persist();
@@ -51,7 +57,8 @@ public class UserService {
 
         user = userOptional.get();
         user.setName(dto.getName());
-        user.setLactoseIntolerant(dto.isGlutenIntolerant());
+        user.setEmail(dto.getEmail());
+        user.setLactoseIntolerant(dto.isLactoseIntolerant());
         user.setGlutenIntolerant(dto.isGlutenIntolerant());
         user.setOilseedsIntolerant(dto.isOilseedsIntolerant());
         user.setFavouritedRecipes(dto.getFavouritedRecipes());

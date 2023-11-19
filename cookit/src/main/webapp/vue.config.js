@@ -6,5 +6,6 @@ module.exports = defineConfig({
 module.exports = {
   devServer: {
     port: 8083,
-    proxy: 'http://localhost:8082'
+    proxy: 'http://localhost:8082',
+    proxy: 'http://localhost:8082/userManager/login'
   } }

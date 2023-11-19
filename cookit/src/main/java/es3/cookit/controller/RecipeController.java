@@ -7,6 +7,8 @@ import es3.cookit.dto.IngredientDto;
 import es3.cookit.dto.RecipeDto;
 import es3.cookit.entities.Recipe;
 import es3.cookit.services.RecipeService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -28,6 +30,7 @@ public class RecipeController {
     RecipeService recipeService;
 
     @GET
+    @PermitAll
     public Response listRecipes() {
         List<Recipe> recipes = recipeService.listRecipes();
         return Response.ok(recipes).build();
@@ -35,6 +38,7 @@ public class RecipeController {
 
     @GET
     @Path("{id}")
+    @PermitAll
     public Response listRecipe(@PathParam("id") Long id) {
         Recipe recipe = recipeService.listRecipeById(id);
         return Response.ok(recipe).build();
@@ -42,12 +46,14 @@ public class RecipeController {
 
     @POST
     @Path("/mainSearchByFoods")
+    @PermitAll
     public Response searchRecipeByFoods(List<FoodDto> dto) {
         List<Recipe> recipes = recipeService.searchRecipeByFoods(dto);
         return Response.ok(recipes).build();
     } 
 
     @POST
+    @RolesAllowed("admin, user")
     public Response saveRecipe(RecipeDto dto) {
         Recipe recipe = recipeService.saveRecipe(dto);
         return Response.ok(recipe).status(201).build();
@@ -55,6 +61,7 @@ public class RecipeController {
 
     @PUT
     @Path("{id}")
+    @RolesAllowed("admin, user")
     public Response updateRecipe(@PathParam("id") Long id, RecipeDto dto) {
         recipeService.updateRecipe(id, dto);
         return Response.status(204).build();
@@ -69,6 +76,7 @@ public class RecipeController {
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed("admin")
     public Response removeRecipe(@PathParam("id") Long id) {
         recipeService.removeRecipe(id);
         return Response.status(204).build();

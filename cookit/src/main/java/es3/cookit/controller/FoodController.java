@@ -4,9 +4,9 @@ import java.util.List;
 
 import es3.cookit.dto.FoodDto;
 import es3.cookit.entities.Food;
-import es3.cookit.entities.Recipe;
 import es3.cookit.services.FoodService;
-
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -28,6 +28,7 @@ public class FoodController {
     FoodService foodService;
 
     @GET
+    @PermitAll
     public Response listFoods() {
         List<Food> foods = foodService.listFood();
         return Response.ok(foods).build();
@@ -35,12 +36,14 @@ public class FoodController {
 
     @GET
     @Path("{id}")
+    @PermitAll
     public Response listFood(@PathParam("id") Long id) {
         Food food = foodService.listFoodById(id);
         return Response.ok(food).build();
     }
 
     @POST
+    @RolesAllowed("admin")
     public Response saveFood(FoodDto dto) {
         Food food = foodService.saveFood(dto);
         return Response.ok(food).status(201).build();
@@ -49,6 +52,7 @@ public class FoodController {
 
     @PUT
     @Path("{id}")
+    @RolesAllowed("admin")
     public Response updateFood(@PathParam("id") Long id, FoodDto dto) {
         foodService.updateFood(id, dto);
         return Response.status(204).build();
@@ -57,6 +61,7 @@ public class FoodController {
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed("admin")
     public Response removeFood(@PathParam("id") Long id) {
         foodService.removeFood(id);
         return Response.status(204).build();

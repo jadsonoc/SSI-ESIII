@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es3.cookit.entities.Recipe;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 
 public class UserDto {
     
     private String name;
+
+    private String email;
 
     private boolean lactoseIntolerant;
 
@@ -32,6 +30,14 @@ public class UserDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isLactoseIntolerant() {
@@ -82,5 +88,4 @@ public class UserDto {
         this.preparedRecipes = preparedRecipes;
     }
 
-    
 }
