@@ -20,7 +20,6 @@ public class UserService {
         if (User.findByEmail(dto.getEmail()) != null) {
             Optional<User> userOptional = user.findByIdOptional(User.findByEmail(dto.getEmail()).id);
             user = userOptional.get();
-            System.out.println(user);
         } else {
             user.setEmail(dto.getEmail());
             user.setName(dto.getName());
@@ -45,7 +44,7 @@ public class UserService {
 
     }
 
-@Transactional
+    @Transactional
     public void updateUser(Long id, UserDto dto) {
         User user = new User();
 

@@ -57,6 +57,47 @@ public class RecipeController {
     public Response searchRecipeByFoods(List<FoodDto> dto) {
         List<Recipe> recipes = recipeService.searchRecipeByFoods(dto);
         return Response.ok(recipes).build();
+    }
+    
+    @POST
+    @Path("/mainSearchByFoodsLogged/{intolerancies}")
+    public Response searchRecipeByFoods(@PathParam("intolerancies") int intoleranciesCode, List<FoodDto> dto) {
+        List<Boolean> intolerancies = new ArrayList<>();
+        if (intoleranciesCode == 0) {
+            intolerancies.add(false);
+            intolerancies.add(false);
+            intolerancies.add(false);
+        } else if (intoleranciesCode == 1) {
+            intolerancies.add(false);
+            intolerancies.add(false);
+            intolerancies.add(true);
+        } else if (intoleranciesCode == 10) {
+            intolerancies.add(false);
+            intolerancies.add(true);
+            intolerancies.add(false);
+        } else if (intoleranciesCode == 100) {
+            intolerancies.add(true);
+            intolerancies.add(false);
+            intolerancies.add(false);
+        } else if (intoleranciesCode == 11) {
+            intolerancies.add(false);
+            intolerancies.add(true);
+            intolerancies.add(true);
+        } else if (intoleranciesCode == 101) {
+            intolerancies.add(true);
+            intolerancies.add(false);
+            intolerancies.add(true);
+        } else if (intoleranciesCode == 110) {
+            intolerancies.add(true);
+            intolerancies.add(true);
+            intolerancies.add(false);
+        } else if (intoleranciesCode == 111) {
+            intolerancies.add(true);
+            intolerancies.add(true);
+            intolerancies.add(true);
+        }
+        List<Recipe> recipes = recipeService.searchRecipeByFoods(dto, intolerancies);
+        return Response.ok(recipes).build();
     } 
 
     @POST

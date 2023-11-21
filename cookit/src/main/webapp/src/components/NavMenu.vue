@@ -18,13 +18,13 @@
           class="nav-item nav-link"
           :class="[this.$route.path.includes('recipe') ? 'active' : '']"
           href="/recipe/list"
-          >Receitas</a
+          >All Recipes</a
         >
         <a
           class="nav-item nav-link"
           :class="[this.$route.path.includes('food') ? 'active' : '']"
           href="/food/list"
-          >Ingredientes</a
+          >All Ingredients</a
         >
         <div v-if="!logged">
           <GoogleLogin v-if="!logged" :callback="callback" auto-login />

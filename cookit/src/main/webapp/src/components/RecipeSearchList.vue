@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import VueCookies from 'vue-cookies';
+import VueCookies from "vue-cookies";
 import axios from "axios";
 import LayoutDiv from "./LayoutDiv.vue";
 import Swal from "sweetalert2";
@@ -59,23 +59,28 @@ export default {
       ingredients: [],
       recipes: [],
       isLogged: false,
-      intolerancies: [],
+      intoleranceCode: "",
     };
   },
   created() {
-    if (VueCookies.isKey('userId')) {
+    if (VueCookies.isKey("userId")) {
       this.isLogged = true;
-      this.intolerancies.push(VueCookies.get('userLactoseIntolerant'));
-      this.intolerancies.push(VueCookies.get('userGlutenIntolerant'));
-      this.intolerancies.push(VueCookies.get('userOilseedsIntolerant'));
-      console.log(this.intolerancies)
+      this.intoleranceCode +=
+        VueCookies.get("userLactoseIntolerant") == "true" ? "1" : "0";
+      this.intoleranceCode +=
+        VueCookies.get("userGlutenIntolerant") == "true" ? "1" : "0";
+      this.intoleranceCode +=
+        VueCookies.get("userOilseedsIntolerant") == "true" ? "1" : "0";
     }
     const param = JSON.parse(this.$route.params.query);
     param.forEach((ingredient) => {
       this.ingredients.push(ingredient);
     });
+    let url = this.isLogged
+      ? "/recipes/mainSearchByFoodsLogged/" + this.intoleranceCode
+      : "/recipes/mainSearchByFoods";
     axios
-      .post("/recipes/mainSearchByFoods", this.ingredients)
+      .post(url, this.ingredients)
       .then((response) => {
         if (response.data.length === 0) {
           Swal.fire({
@@ -91,14 +96,13 @@ export default {
             this.recipes.push(element);
           });
         }
-        console.log(this.intolerancies)
         return response;
       })
       .catch((error) => {
         Swal.fire({
           icon: "error",
-          //title: 'An Error Occured!',
-          title: error,
+          title: 'An Error Occured!',
+          //title: error,
           showConfirmButton: false,
           timer: 1500,
         });

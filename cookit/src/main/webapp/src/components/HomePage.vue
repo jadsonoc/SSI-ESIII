@@ -3,14 +3,15 @@
   <NavMenu />
   
   <div class="d-flex align-content-center flex-wrap">
-    <div class="container-fluid">
+    <div class="container-fluid my-5">
       <img src="../assets/img/logo2.png" class="img-fluid rounded mx-auto d-block" alt="Imagem responsiva">
-      {{ selectedItems }}
-      <div class="input-group mb-3">
+
+      <div class="input-group my-4 py-4">
         <vue3-tags-input v-model:tags="tags"
           v-model="tag"
           :select="true"
           :select-items="foods"
+          class="form-control"
           @on-select="handleSelectedTag"
           @on-tags-changed="handleChangeTag"
           placeholder="Select the Ingredients">
@@ -28,7 +29,7 @@
         <div class="input-group-append">
           <router-link 
             :to="`/recipe/search/list/${JSON.stringify(selectedItems)}`"
-            class="btn btn-outline-info mx-1">Go
+            class="btn btn-outline-secondary mx-1 py-3 px-5">Go
           </router-link>
         </div>
       </div>
@@ -38,7 +39,7 @@
   <!-- INICIO CARD DECK -->
   <div class="card-deck">
     <div class="card">
-      <img class="card-img-top" src="../assets/img/number1.png" alt="Imagem de capa do card">
+      <img class="card-img-top" src="../assets/img/number1.png" alt="Imagem de capa do card" height="30px" width="10px">
       <div class="card-body">
         <h5 class="card-title">Título do card</h5>
         <p class="card-text">Este é um card mais longo com suporte a texto embaixo, que funciona como uma introdução a um conteúdo adicional. Este conteúdo é um pouco maior.</p>
