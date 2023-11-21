@@ -8,6 +8,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -33,8 +34,7 @@ public class Recipe extends PanacheEntity {
     @Column
     private int difficulty;
 
-    @OneToMany (targetEntity = Ingredient.class, cascade = CascadeType.REMOVE,
-                fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Ingredient.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients = new ArrayList<>();
 
     public Recipe() {
@@ -100,4 +100,3 @@ public class Recipe extends PanacheEntity {
     }
 
 }
-

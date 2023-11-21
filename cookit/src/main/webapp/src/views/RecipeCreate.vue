@@ -218,6 +218,7 @@ export default {
     },
     handleSave() {
       this.isSaving = true;
+      console.log(this.recipe)
       axios
         .post("/recipes", this.recipe)
         .then((response) => {

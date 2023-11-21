@@ -1,11 +1,11 @@
 <template>
-  <NavMenu />
+  <NavMenu  />
   <layout-div>
     <div class="container">
       <h2 class="text-center mt-5 mb-3">Recipe Manager</h2>
       <div class="card">
         <div class="card-header">
-          <router-link to="/recipe/create" class="btn btn-outline-primary"
+          <router-link v-if="isLogged" to="/recipe/create" class="btn btn-outline-primary"
             >Create New Recipe
           </router-link>
         </div>
@@ -34,12 +34,12 @@
                     class="btn btn-outline-info mx-1"
                     >Show</router-link
                   >
-                  <router-link
+                  <router-link v-if="isLogged"
                     :to="`/recipe/edit/${recipe.id}`"
                     class="btn btn-outline-success mx-1"
                     >Edit</router-link
                   >
-                  <button
+                  <button v-if="isLogged"
                     @click="handleDelete(recipe.id)"
                     className="btn btn-outline-danger mx-1"
                   >
@@ -72,12 +72,16 @@ export default {
     return {
       posts: [],
       recipes: [],
+      isLogged: false,
     };
   },
   created() {
     this.fetchRecipesList();
-    if (VueCookies.isKey('userId'))
-            console.log(VueCookies.get('userId'));
+    if (VueCookies.isKey('userId')) {
+      this.isLogged = true;
+    }
+    //Nao preciso do props, pq tenho isso
+          
   },
   methods: {
     fetchRecipesList() {

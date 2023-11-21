@@ -176,6 +176,7 @@ export default {
         this.recipe.serve = recipeInfo.serve;
         this.recipe.difficulty = recipeInfo.difficulty;
         this.recipe.ingredients = recipeInfo.ingredients;
+        
         return response;
       })
       .catch((error) => {

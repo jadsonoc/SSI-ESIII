@@ -43,7 +43,6 @@ public class FoodController {
     }
 
     @POST
-    @RolesAllowed("admin")
     public Response saveFood(FoodDto dto) {
         Food food = foodService.saveFood(dto);
         return Response.ok(food).status(201).build();
@@ -52,7 +51,6 @@ public class FoodController {
 
     @PUT
     @Path("{id}")
-    @RolesAllowed("admin")
     public Response updateFood(@PathParam("id") Long id, FoodDto dto) {
         foodService.updateFood(id, dto);
         return Response.status(204).build();
@@ -61,7 +59,6 @@ public class FoodController {
 
     @DELETE
     @Path("{id}")
-    @RolesAllowed("admin")
     public Response removeFood(@PathParam("id") Long id) {
         foodService.removeFood(id);
         return Response.status(204).build();

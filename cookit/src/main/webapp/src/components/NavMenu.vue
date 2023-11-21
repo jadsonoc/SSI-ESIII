@@ -98,7 +98,12 @@ export default {
         .then((response) => {
           this.loggedUser = response.data;
           VueCookies.set("userId", response.data.id, "15m");
-          if (VueCookies.isKey("userId")) this.logged = true;
+          if (VueCookies.isKey("userId")) {
+            this.logged = true;
+            VueCookies.set("userLactoseIntolerant", response.data.lactoseIntolerant, "15m");
+            VueCookies.set("userGlutenIntolerant", response.data.glutenIntolerant, "15m");
+            VueCookies.set("userOilseedsIntolerant", response.data.oilseedsIntolerant, "15m");
+          }
           return response;
         })
         .catch((error) => {

@@ -119,7 +119,7 @@ export default {
     handleSave() {
       this.isSaving = true;
       axios
-        .post("/foods", this.food)
+        .post("http://localhost:8082/foods", this.food)
         .then((response) => {
           Swal.fire({
             icon: "success",
@@ -139,7 +139,7 @@ export default {
           this.isSaving = false;
           Swal.fire({
             icon: "error",
-            title: "An Error Occured!",
+            title: error + "An Error Occured!",
             showConfirmButton: false,
             timer: 1500,
           });

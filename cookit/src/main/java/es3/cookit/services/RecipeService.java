@@ -14,6 +14,7 @@ import es3.cookit.dto.RecipeDto;
 import es3.cookit.entities.Food;
 import es3.cookit.entities.Ingredient;
 import es3.cookit.entities.Recipe;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -25,13 +26,13 @@ public class RecipeService {
     public List<Recipe> listRecipes() {
         return Recipe.listAll();
     }
-    
+
     public Recipe listRecipeById(Long id) {
         return Recipe.findById(id);
     }
 
     public List<Recipe> searchRecipeByFoods(List<FoodDto> dto) {
-        
+
         List<Recipe> allRecipes = Recipe.listAll();
         List<Recipe> responseRecipes = new ArrayList<>();
 
@@ -51,49 +52,72 @@ public class RecipeService {
             if (this.contador == recipe.getIngredients().stream()
                     .filter(Ingredient::isRequired)
                     .count()) {
-                    responseRecipes.add(recipe);       
+                responseRecipes.add(recipe);
             }
         }
         return responseRecipes;
     };
 
-    /* 
-    
-            allRecipes.forEach(recipe -> {
-            dto.forEach(food -> {
-                recipe.getIngredients().stream()
-                    .filter(Ingredient::isRequired)
-                    .collect(Collectors.toList())
-                    .forEach(ingredientRequired -> {
-                        if ( food.getName() == ingredientRequired.getFood().getName() ){
-                            
-                        }
-                    });
-            });
-        });
-    allRecipes.forEach(recipe -> {
-        dto.forEach(food -> {
-            Stream<Ingredient> required = recipe.getIngredients().stream()
-                    .filter(Ingredient::isRequired);
-                                                
-            if ( required.allMatch(r -> {
-                    return r.getFood().getName().equals(food.getName());
+    public List<Recipe> searchRecipeByFoods(List<FoodDto> dto, List<Boolean> intolerances) {
+
+        List<Recipe> allRecipesFound = this.searchRecipeByFoods(dto);
+        List<Recipe> responseRecipes = new ArrayList<>();
+
+        allRecipesFound.forEach(recipe -> {
+            if (recipe.getIngredients().stream().anyMatch(ingredient -> {
+                if (!ingredient.getFood().isLactoseFree() && intolerances.get(0)) {
+                    return false;
+                } else if (!ingredient.getFood().isGlutenFree() && intolerances.get(1)) {
+                    return false;
+                } else if (!ingredient.getFood().isOilseedFree() && intolerances.get(2)) {
+                    return false;
+                } else {
+                    return true;
+                }
             })) {
                 responseRecipes.add(recipe);
             }
-            recipe.getIngredients().forEach(ingredient -> {
-                if (ingredient.getFood().getName().equals(food.getName())) {
-                    System.out.println(required);
-                    responseRecipes.add(recipe);
-                }
-            });
-            
         });
-    });
-    
-    return responseRecipes;
-    }
-    */
+        return responseRecipes;
+    };
+
+    /*
+     * 
+     * allRecipes.forEach(recipe -> {
+     * dto.forEach(food -> {
+     * recipe.getIngredients().stream()
+     * .filter(Ingredient::isRequired)
+     * .collect(Collectors.toList())
+     * .forEach(ingredientRequired -> {
+     * if ( food.getName() == ingredientRequired.getFood().getName() ){
+     * 
+     * }
+     * });
+     * });
+     * });
+     * allRecipes.forEach(recipe -> {
+     * dto.forEach(food -> {
+     * Stream<Ingredient> required = recipe.getIngredients().stream()
+     * .filter(Ingredient::isRequired);
+     * 
+     * if ( required.allMatch(r -> {
+     * return r.getFood().getName().equals(food.getName());
+     * })) {
+     * responseRecipes.add(recipe);
+     * }
+     * recipe.getIngredients().forEach(ingredient -> {
+     * if (ingredient.getFood().getName().equals(food.getName())) {
+     * System.out.println(required);
+     * responseRecipes.add(recipe);
+     * }
+     * });
+     * 
+     * });
+     * });
+     * 
+     * return responseRecipes;
+     * }
+     */
     @Transactional
     public Recipe saveRecipe(RecipeDto dto) {
         Recipe recipe = new Recipe();
@@ -104,7 +128,7 @@ public class RecipeService {
         recipe.setServe(dto.getServe());
         recipe.setTime(dto.getTime());
         recipe.setIngredients(dto.getIngredients());
-    
+
         recipe.persist();
 
         return recipe;
@@ -119,15 +143,13 @@ public class RecipeService {
         if (reciOptional.isEmpty()) {
             throw new NullPointerException("Recipe Not Found!");
         }
+        //Foi o desespero
+        dto.getIngredients().forEach((ingredient -> {
+            ingredient.id = null;
+        }));
 
-        recipe = reciOptional.get();
-        recipe.setName(dto.getName());
-        recipe.setPreparation(dto.getPreparation());
-        recipe.setServe(dto.getServe());
-        recipe.setTime(dto.getTime());
-        recipe.setDifficulty(dto.getDifficulty());
-        recipe.setIngredients(dto.getIngredients());
-        recipe.persist();
+        this.removeRecipe(id);
+        this.saveRecipe(dto);
     }
 
     @Transactional
@@ -164,3 +186,54 @@ public class RecipeService {
     }
 
 }
+
+/*
+ *   
+ *     @Transactional
+ * public void updateRecipeIngredients(Long idRecipe, List<IngredientDto> dto) {
+        Recipe recipe = new Recipe();
+
+        Optional<Recipe> reciOptional = recipe.findByIdOptional(idRecipe);
+
+        if (reciOptional.isEmpty()) {
+            throw new NullPointerException("Recipe Not Found!");
+        }
+
+        List<Ingredient> ingredients = new ArrayList<>();
+
+        for (IngredientDto iDto : dto) {
+            ingredients.add(new Ingredient(iDto.getFood(), iDto.getQuantity(), iDto.isRequired()));
+        }
+
+        recipe = reciOptional.get();
+        recipe.setIngredients(ingredients);
+        recipe.persist();
+    }
+    
+    @Transactional
+    public void updateRecipe(Long id, RecipeDto dto) {
+        Recipe recipe = new Recipe();
+
+        Optional<Recipe> reciOptional = recipe.findByIdOptional(id);
+
+        if (reciOptional.isEmpty()) {
+            throw new NullPointerException("Recipe Not Found!");
+        }
+     
+        Recipe.update("name = :name, " +
+                    "preparation = :preparation, " +
+                    "serve = :serve, " +
+                    "time = :time, " +
+                    "difficulty = :difficulty, " +
+                    "ingredients = :ingredients " +
+                    "where id = :id ", 
+                Parameters.with("name", dto.getName())
+                    .and("preparation", dto.getPreparation())
+                    .and("serve", dto.getServe())
+                    .and("time", dto.getTime())
+                    .and("difficulty", dto.getDifficulty())
+                    .and("ingredients", dto.getIngredients())
+                    .and("id", id));
+                    
+    }
+ */

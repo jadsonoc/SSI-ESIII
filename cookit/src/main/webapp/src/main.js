@@ -21,8 +21,6 @@ import RecipeShow from './views/RecipeShow';
 import FoodList from './views/FoodList';
 import FoodCreate from './views/FoodCreate';
 import FoodEdit from './views/FoodEdit';
-import FoodShow from './views/FoodShow';
-
 dom.watch();
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
@@ -47,7 +45,7 @@ const router = createRouter({
     { path: '/food/list', component: FoodList },
     { path: '/food/create', component: FoodCreate },
     { path: '/food/edit/:id', component: FoodEdit },
-    { path: '/food/show/:id', component: FoodShow },
+    { path: '/food/show/:id', component: RecipeShow },
   ],
 });
 

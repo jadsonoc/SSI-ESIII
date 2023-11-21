@@ -66,4 +66,11 @@ public class RecipeDto {
         this.ingredients = ingredients;
     }
 
+    @Override
+    public String toString() {
+        return "RecipeDto [name=" + name + ", preparation=" + preparation + ", time=" + time + ", serve=" + serve
+                + ", difficulty=" + difficulty + ", ingredients=" + ingredients + "]";
+    }
+
+    
 }

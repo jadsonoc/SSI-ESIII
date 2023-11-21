@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import VueCookies from 'vue-cookies';
 import axios from "axios";
 import LayoutDiv from "./LayoutDiv.vue";
 import Swal from "sweetalert2";
@@ -57,9 +58,18 @@ export default {
     return {
       ingredients: [],
       recipes: [],
+      isLogged: false,
+      intolerancies: [],
     };
   },
   created() {
+    if (VueCookies.isKey('userId')) {
+      this.isLogged = true;
+      this.intolerancies.push(VueCookies.get('userLactoseIntolerant'));
+      this.intolerancies.push(VueCookies.get('userGlutenIntolerant'));
+      this.intolerancies.push(VueCookies.get('userOilseedsIntolerant'));
+      console.log(this.intolerancies)
+    }
     const param = JSON.parse(this.$route.params.query);
     param.forEach((ingredient) => {
       this.ingredients.push(ingredient);
@@ -81,6 +91,7 @@ export default {
             this.recipes.push(element);
           });
         }
+        console.log(this.intolerancies)
         return response;
       })
       .catch((error) => {

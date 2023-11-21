@@ -25,30 +25,25 @@
               <tr v-for="food in foods" :key="food.id">
                 <td>{{ food.name }}</td>
                 <td>{{ food.foodUnit }}</td>
-                <td v-if="food.lactoseFree" class="text-center"> 
+                <td v-if="food.lactoseFree" class="text-center">
                   <i class="fa fa-check-circle fa-2x" aria-hidden="true" />
-                </td> 
-                <td v-else  class="text-center">
+                </td>
+                <td v-else class="text-center">
                   <i class="fa fa-times fa-2x" aria-hidden="true" />
                 </td>
-                <td v-if="food.glutenFree" class="text-center"> 
+                <td v-if="food.glutenFree" class="text-center">
                   <i class="fa fa-check-circle fa-2x" aria-hidden="true" />
-                </td> 
-                <td v-else  class="text-center">
+                </td>
+                <td v-else class="text-center">
                   <i class="fa fa-times fa-2x" aria-hidden="true" />
                 </td>
-                <td v-if="food.oilseedFree" class="text-center"> 
+                <td v-if="food.oilseedFree" class="text-center">
                   <i class="fa fa-times fa-2x" aria-hidden="true" />
-                </td> 
-                <td v-else  class="text-center">
+                </td>
+                <td v-else class="text-center">
                   <i class="fa fa-check-circle fa-2x" aria-hidden="true" />
                 </td>
                 <td>
-                  <router-link
-                    :to="`/food/show/${food.id}`"
-                    class="btn btn-outline-info mx-1"
-                    >Show</router-link
-                  >
                   <router-link
                     :to="`/food/edit/${food.id}`"
                     class="btn btn-outline-success mx-1"
