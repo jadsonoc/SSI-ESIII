@@ -99,4 +99,10 @@ public class Recipe extends PanacheEntity {
         this.ingredients = ingredients;
     }
 
+    @Override
+    public String toString() {
+        return "Recipe [name=" + name + ", preparation=" + preparation + ", time=" + time + ", serve=" + serve
+                + ", difficulty=" + difficulty + ", ingredients=" + ingredients + "]";
+    }
+
 }

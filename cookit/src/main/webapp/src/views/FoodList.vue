@@ -5,7 +5,7 @@
       <h2 class="text-center mt-5 mb-3">Food Manager</h2>
       <div class="card">
         <div class="card-header">
-          <router-link to="/food/create" class="btn btn-outline-primary"
+          <router-link v-if="isLogged" to="/food/create" class="btn btn-outline-primary"
             >Create New Food Ingredient
           </router-link>
         </div>
@@ -44,12 +44,12 @@
                   <i class="fa fa-check-circle fa-2x" aria-hidden="true" />
                 </td>
                 <td>
-                  <router-link
+                  <router-link v-if="isLogged"
                     :to="`/food/edit/${food.id}`"
                     class="btn btn-outline-success mx-1"
                     >Edit</router-link
                   >
-                  <button
+                  <button v-if="isLogged"
                     @click="handleDelete(food.id)"
                     className="btn btn-outline-danger mx-1"
                   >
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import VueCookies from 'vue-cookies';
 import axios from "axios";
 import NavMenu from "../components/NavMenu.vue";
 import LayoutDiv from "../components/LayoutDiv.vue";
@@ -80,10 +81,14 @@ export default {
   data() {
     return {
       foods: [],
+      idLogged: false,
     };
   },
   created() {
     this.fetchFoodsList();
+    if (VueCookies.isKey('userId')) {
+      this.isLogged = true;
+    }
   },
   methods: {
     fetchFoodsList() {

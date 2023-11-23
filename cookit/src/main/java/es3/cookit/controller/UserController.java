@@ -1,12 +1,11 @@
 package es3.cookit.controller;
 
-import es3.cookit.UserUtilsService;
+import java.util.List;
+
 import es3.cookit.dto.UserDto;
-import es3.cookit.entities.Food;
+import es3.cookit.entities.Recipe;
 import es3.cookit.entities.User;
 import es3.cookit.services.UserService;
-import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -29,12 +28,40 @@ public class UserController {
         return Response.ok(user).build();
     }
 
+    @GET
+    @Path("/favourite/{id}")
+    public Response listUsersFavouritesRecipes(@PathParam("id") Long idUser) {
+        List<Recipe> recipes = userService.listUsersFavouritesRecipesById(idUser);
+        return Response.ok(recipes).build();
+    }
+
+    @GET
+    @Path("/isFavourite/{idUser}/{idRecipe}")
+    public Response isFavouriteRecipe(@PathParam("idUser") Long idUser, @PathParam("idRecipe") Long idRecipe) {
+        boolean isFavouriteUsersRecipe = userService.isFavouriteUsersRecipe(idUser, idRecipe);
+        return Response.ok(isFavouriteUsersRecipe).build();
+    }
+
     @POST
     @Path("/login")
     public Response registerUser(UserDto dto) {
         User loggedUser = new User();
         loggedUser = userService.logginUser(dto);
         return Response.ok(loggedUser).status(201).build();
+    }
+
+    @PUT
+    @Path("/favourite/{idUser}/{idRecipe}")
+    public Response favouriteRecipe(@PathParam("idUser") Long idUser, @PathParam("idRecipe") Long idRecipe) {
+        userService.favouriteRecipe(idUser, idRecipe);
+        return Response.status(204).build();
+    }
+
+    @PUT
+    @Path("/unfavourite/{idUser}/{idRecipe}")
+    public Response unfavouriteRecipe(@PathParam("idUser") Long idUser, @PathParam("idRecipe") Long idRecipe) {
+        userService.unfavouriteRecipe(idUser, idRecipe);
+        return Response.status(204).build();
     }
 
     @Path("/logout/{id}")

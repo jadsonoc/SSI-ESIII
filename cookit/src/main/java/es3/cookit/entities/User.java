@@ -4,6 +4,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -42,20 +44,16 @@ public class User extends PanacheEntity {
     @Column
     private Date lastLogin;
 
-    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.REMOVE,
-                fetch = FetchType.EAGER)
+    @ManyToMany (cascade = CascadeType.ALL)
     private List<Recipe> favouritedRecipes = new ArrayList<>();
 
-    @OneToMany (targetEntity = Recipe.class, cascade = CascadeType.REMOVE,
-                fetch = FetchType.EAGER)
-    private List<Recipe> preparedRecipes = new ArrayList<>();
 
     public User() {
     
     }
 
     public User(String name, String email, boolean lactoseIntolerant, boolean glutenIntolerant,
-            boolean oilseedsIntolerant, Date lastLogin, List<Recipe> favouritedRecipes, List<Recipe> preparedRecipes) {
+            boolean oilseedsIntolerant, Date lastLogin, List<Recipe> favouritedRecipes) {
         this.name = name;
         this.email = email;
         this.lactoseIntolerant = lactoseIntolerant;
@@ -63,7 +61,7 @@ public class User extends PanacheEntity {
         this.oilseedsIntolerant = oilseedsIntolerant;
         this.lastLogin = lastLogin;
         this.favouritedRecipes = favouritedRecipes;
-        this.preparedRecipes = preparedRecipes;
+       
     }
 
     public String getName() {
@@ -123,13 +121,7 @@ public class User extends PanacheEntity {
         this.favouritedRecipes = favouritedRecipes;
     }
 
-    public List<Recipe> getPreparedRecipes() {
-        return preparedRecipes;
-    }
 
-    public void setPreparedRecipes(List<Recipe> preparedRecipes) {
-        this.preparedRecipes = preparedRecipes;
-    }
 
 
     public static User findByName(String name) {

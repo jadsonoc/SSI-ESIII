@@ -4,10 +4,28 @@
     <h2 class="text-center mt-5 mb-3">Recipe Details</h2>
     <div class="card">
       <div class="card-header">
-        <router-link class="btn btn-outline-info float-right" to="/recipe/list"
-          >View All Recipes
-        </router-link>
+        <div class="row">
+          <div class="col">
+            <router-link class="btn btn-outline-info" to="/recipe/list"
+              >View All Recipes
+            </router-link>
+          </div>
+          <div v-if="isFavourited" class="col">
+            <button v-if="isLogged" @click="handleUnfavourite()" className="btn">
+              <i
+                class="fa fa-star fa-2x heavy"
+                aria-hidden="true"
+              ></i>
+            </button>
+          </div>
+          <div v-else class="col">
+            <button v-if="isLogged" @click="handleFavourite()" className="btn">
+              <i class="fa fa-star fa-2x light" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
       </div>
+
       <div class="card-body">
         <b className="text-muted">Name:</b>
         <p>{{ recipe.name }}</p>
@@ -44,6 +62,7 @@
 </template>
 
 <script>
+import VueCookies from "vue-cookies";
 import axios from "axios";
 import NavMenu from "../components/NavMenu.vue";
 import LayoutDiv from "../components/LayoutDiv.vue";
@@ -65,12 +84,23 @@ export default {
         difficulty: "",
         ingredients: [],
       },
+      favouritedRecipeIds: [],
+      isLogged: false,
+      isFavourited: false,
     };
   },
+  watch: {
+    isFavourited(newValue) {
+      this.isFavourited = newValue;
+    }
+  },
   created() {
-    const id = this.$route.params.id;
+    if (VueCookies.isKey("userId")) {
+      this.isLogged = true;
+    }
+    const recipeId = this.$route.params.id;
     axios
-      .get(`/recipes/${id}`)
+      .get(`/recipes/${recipeId}`)
       .then((response) => {
         let recipeInfo = response.data;
         this.recipe.name = recipeInfo.name;
@@ -90,7 +120,84 @@ export default {
         });
         return error;
       });
+    const userId = VueCookies.get("userId");
+    axios
+      .get(`/userManager/isFavourite/${userId}/${recipeId}`)
+      .then((response) => {
+        this.isFavourited = response.data;
+        return response;
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "An Error Occured Getting Favourites Recipes!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return error;
+      });
   },
-  methods: {},
+  methods: {
+    handleFavourite() {
+      const userId = VueCookies.get("userId");
+      const recipeId = this.$route.params.id;
+      axios
+        .put(`/userManager/favourite/${userId}/${recipeId}`)
+        .then((response) => {
+          Swal.fire({
+            icon: "success",
+            title: "Recipe favourited successfully!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.isFavourited = true;
+          return response;
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "An Error Occured!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return error;
+        });
+    },
+    handleUnfavourite() {
+      const userId = VueCookies.get("userId");
+      const recipeId = this.$route.params.id;
+      axios
+        .put(`/userManager/unfavourite/${userId}/${recipeId}`)
+        .then((response) => {
+          Swal.fire({
+            icon: "success",
+            title: "Recipe unfavourited successfully!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.isFavourited = false;
+          return response;
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "An Error Occured!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return error;
+        });
+    },
+  },
 };
 </script>
+
+<style scoped>
+.light {
+  opacity: 0.2; /* Mal consegue ver o texto acima do background */
+}
+.heavy {
+  opacity: 0.9; /* Vê o texto muito claramente acima do background */
+  color: goldenrod;
+}
+</style>
