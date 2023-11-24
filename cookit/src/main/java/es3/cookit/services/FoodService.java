@@ -6,6 +6,7 @@ import java.util.Optional;
 import es3.cookit.dto.FoodDto;
 import es3.cookit.entities.Food;
 import es3.cookit.entities.Recipe;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -18,6 +19,11 @@ public class FoodService {
 
     public Food listFoodById(Long id) {
         return Food.findById(id);
+    }
+
+    public List<Food> listFoodByQuery(String searchQuery) {
+        Food food = new Food();
+        return food.list("name like ?1", "%" + searchQuery + "%");
     }
     
     @Transactional

@@ -42,6 +42,14 @@ public class FoodController {
         return Response.ok(food).build();
     }
 
+    @GET
+    @Path("search/{query}")
+    @PermitAll
+    public Response listFood(@PathParam("query") String searchQuery) {
+        List <Food> foodFound = foodService.listFoodByQuery(searchQuery);
+        return Response.ok(foodFound).build();
+    }
+
     @POST
     public Response saveFood(FoodDto dto) {
         Food food = foodService.saveFood(dto);

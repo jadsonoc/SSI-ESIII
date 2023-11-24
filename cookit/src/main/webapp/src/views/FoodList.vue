@@ -9,6 +9,9 @@
             >Create New Food Ingredient
           </router-link>
         </div>
+        <div class="card-header">
+          <input v-model="searchQuery" type="text" @keyup="filterFoodList" class="form-control" placeholder="Search for an Ingredient...">
+        </div>
         <div class="card-body">
           <table class="table table-bordered">
             <thead>
@@ -82,6 +85,7 @@ export default {
     return {
       foods: [],
       idLogged: false,
+      searchQuery: '',
     };
   },
   created() {
@@ -139,6 +143,22 @@ export default {
             });
         }
       });
+    },
+    filterFoodList() {
+      if (this.searchQuery.length === 0)
+        this.fetchFoodsList();
+      axios
+        .get(`/foods/search/${this.searchQuery}`)
+        .then((response) => {
+          this.foods = response.data;
+          this.foods.sort((a, b) => {
+            return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+          });
+          return response;
+        })
+        .catch((error) => {
+          return error;
+        });
     },
   },
 };
