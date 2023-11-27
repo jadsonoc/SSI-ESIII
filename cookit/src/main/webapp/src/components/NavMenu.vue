@@ -27,8 +27,7 @@
           >All Ingredients</a
         >
         <div v-if="!logged">
-          <GoogleLogin v-if="!logged" :callback="callback" auto-login />
-          <!-- removi prompt -->
+          <GoogleLogin :callback="callback" auto-login /><!-- removi prompt -->
         </div>
 
         <router-link

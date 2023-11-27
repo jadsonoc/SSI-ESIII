@@ -63,8 +63,10 @@ export default {
     };
   },
   created() {
+    let userId = 0;
     if (VueCookies.isKey("userId")) {
       this.isLogged = true;
+      userId = VueCookies.get("userId");
       this.intoleranceCode +=
         VueCookies.get("userLactoseIntolerant") == "true" ? "1" : "0";
       this.intoleranceCode +=
@@ -76,8 +78,9 @@ export default {
     param.forEach((ingredient) => {
       this.ingredients.push(ingredient);
     });
+    //Isso aqui foi estúpido, visto que o BackEnd possui essas infosmações, bastava passar o idUser
     let url = this.isLogged
-      ? "/recipes/mainSearchByFoodsLogged/" + this.intoleranceCode
+      ? "/recipes/mainSearchByFoodsLoggedV2/" + userId //? "/recipes/mainSearchByFoodsLogged/" + this.intoleranceCode
       : "/recipes/mainSearchByFoods";
     axios
       .post(url, this.ingredients)

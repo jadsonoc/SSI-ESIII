@@ -14,6 +14,7 @@ import es3.cookit.dto.RecipeDto;
 import es3.cookit.entities.Food;
 import es3.cookit.entities.Ingredient;
 import es3.cookit.entities.Recipe;
+import es3.cookit.entities.User;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -81,6 +82,54 @@ public class RecipeService {
                     .noneMatch(ingredient -> ingredient.getFood().isOilseedFree() == false))
                     .collect(Collectors.toList());
         }
+        responseRecipes = recipesFound;
+        return responseRecipes;
+    }
+
+    public List<Recipe> searchRecipeByFoodsLogged(List<FoodDto> dto, Long idUser) {
+        User user = new User();
+
+        Optional<User> userOptional = user.findByIdOptional(idUser);
+
+        if (userOptional.isEmpty()) {
+            throw new NullPointerException("User Not Found!");
+        }
+
+        List<Recipe> recipesFound = this.searchRecipeByFoods(dto);
+        List<Recipe> responseRecipes = new ArrayList<>();
+        List<Food> dislikes = new ArrayList<>();
+        List<Boolean> intolerances = new ArrayList<>();
+
+        user = userOptional.get();
+
+        intolerances.add(user.isLactoseIntolerant());
+        intolerances.add(user.isGlutenIntolerant());
+        intolerances.add(user.isOilseedsIntolerant());
+
+        //Lactose filter
+        if (intolerances.get(0)) {
+            recipesFound = recipesFound.stream().filter(recipe -> recipe.getIngredients().stream()
+                    .noneMatch(ingredient -> ingredient.getFood().isLactoseFree() == false))
+                    .collect(Collectors.toList());
+        }
+        //Gluten filter
+        if (intolerances.get(1)) {
+            recipesFound = recipesFound.stream().filter(recipe -> recipe.getIngredients().stream()
+                    .noneMatch(ingredient -> ingredient.getFood().isGlutenFree() == false))
+                    .collect(Collectors.toList());
+        }
+        //Oilseeds filter
+        if (intolerances.get(2)) {
+            recipesFound = recipesFound.stream().filter(recipe -> recipe.getIngredients().stream()
+                    .noneMatch(ingredient -> ingredient.getFood().isOilseedFree() == false))
+                    .collect(Collectors.toList());
+        }
+
+        dislikes.addAll(user.getDislikesIngredients());
+        recipesFound = recipesFound.stream().filter(recipe -> recipe.getIngredients().stream()
+                    .noneMatch(ingredient -> dislikes.contains(ingredient.getFood())))
+                    .collect(Collectors.toList());           
+
         responseRecipes = recipesFound;
         return responseRecipes;
     }

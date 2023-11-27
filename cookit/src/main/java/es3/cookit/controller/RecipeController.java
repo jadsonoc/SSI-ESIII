@@ -12,7 +12,6 @@ import es3.cookit.entities.Recipe;
 import es3.cookit.services.FoodService;
 import es3.cookit.services.RecipeService;
 import jakarta.annotation.security.PermitAll;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -97,6 +96,13 @@ public class RecipeController {
             intolerancies.add(true);
         }
         List<Recipe> recipes = recipeService.searchRecipeByFoods(dto, intolerancies);
+        return Response.ok(recipes).build();
+    }
+
+    @POST
+    @Path("/mainSearchByFoodsLoggedV2/{idUser}")
+    public Response searchRecipeByFoodsLogged(@PathParam("idUser") Long idUser, List<FoodDto> dto) {
+        List<Recipe> recipes = recipeService.searchRecipeByFoodsLogged(dto, idUser);
         return Response.ok(recipes).build();
     } 
 
