@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import es3.cookit.dto.UserDto;
+import es3.cookit.entities.Food;
+import es3.cookit.entities.Ingredient;
 import es3.cookit.entities.Recipe;
 import es3.cookit.entities.User;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -85,10 +87,39 @@ public class UserService {
         user.setLactoseIntolerant(dto.isLactoseIntolerant());
         user.setGlutenIntolerant(dto.isGlutenIntolerant());
         user.setOilseedsIntolerant(dto.isOilseedsIntolerant());
-        user.setFavouritedRecipes(dto.getFavouritedRecipes());
-        //user.setPreparedRecipes(dto.getPreparedRecipes());
+
         user.persist();
     }
+    
+    @Transactional
+    public void dislikeIngredients(Long idUser, Long idIngredient, boolean add) {
+        User user = new User();
+        Food food = new Food();
+
+        List<Food> dislikeUserIngredients = new ArrayList<>();
+
+        Optional<User> userOptional = user.findByIdOptional(idUser);
+
+        Optional<Food> foodOptional = food.findByIdOptional(idIngredient);
+
+        if (userOptional.isEmpty()) {
+            throw new NullPointerException("User Not Found!");
+        }
+        
+        user = userOptional.get();
+        food = foodOptional.get();
+        
+        dislikeUserIngredients = user.getDislikesIngredients();
+        if (add) {
+            dislikeUserIngredients.add(food);
+        } else {
+            dislikeUserIngredients.remove(food);
+        }
+        
+        user.persist();
+
+    }
+
 
     @Transactional
     public void favouriteRecipe(Long idUser, Long idRecipe) {
@@ -140,3 +171,6 @@ public class UserService {
     }
 
 }
+
+
+    

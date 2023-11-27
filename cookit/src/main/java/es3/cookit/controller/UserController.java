@@ -51,6 +51,20 @@ public class UserController {
     }
 
     @PUT
+    @Path("/dislikes/add/{idUser}/{idIngredient}")
+    public Response addDislikeIngredients(@PathParam("idUser") Long idUser, @PathParam("idIngredient") Long idIngredient) {
+        userService.dislikeIngredients(idUser, idIngredient, true);
+        return Response.status(204).build();
+    }
+
+    @PUT
+    @Path("/dislikes/remove/{idUser}/{idIngredient}")
+    public Response removeDislikeIngredients(@PathParam("idUser") Long idUser, @PathParam("idIngredient") Long idIngredient) {
+        userService.dislikeIngredients(idUser, idIngredient, false);
+        return Response.status(204).build();
+    }
+
+    @PUT
     @Path("/favourite/{idUser}/{idRecipe}")
     public Response favouriteRecipe(@PathParam("idUser") Long idUser, @PathParam("idRecipe") Long idRecipe) {
         userService.favouriteRecipe(idUser, idRecipe);

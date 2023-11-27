@@ -3,12 +3,9 @@ package es3.cookit.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.sql.Date;
@@ -47,13 +44,15 @@ public class User extends PanacheEntity {
     @ManyToMany (cascade = CascadeType.ALL)
     private List<Recipe> favouritedRecipes = new ArrayList<>();
 
+    @ManyToMany (cascade = CascadeType.ALL)
+    private List<Food> dislikesIngredients = new ArrayList<>();
 
     public User() {
-    
     }
 
     public User(String name, String email, boolean lactoseIntolerant, boolean glutenIntolerant,
-            boolean oilseedsIntolerant, Date lastLogin, List<Recipe> favouritedRecipes) {
+            boolean oilseedsIntolerant, Date lastLogin, List<Recipe> favouritedRecipes,
+            List<Food> dislikesIngredients) {
         this.name = name;
         this.email = email;
         this.lactoseIntolerant = lactoseIntolerant;
@@ -61,7 +60,7 @@ public class User extends PanacheEntity {
         this.oilseedsIntolerant = oilseedsIntolerant;
         this.lastLogin = lastLogin;
         this.favouritedRecipes = favouritedRecipes;
-       
+        this.dislikesIngredients = dislikesIngredients;
     }
 
     public String getName() {
@@ -121,8 +120,13 @@ public class User extends PanacheEntity {
         this.favouritedRecipes = favouritedRecipes;
     }
 
+    public List<Food> getDislikesIngredients() {
+        return dislikesIngredients;
+    }
 
-
+    public void setDislikesIngredients(List<Food> dislikesIngredients) {
+        this.dislikesIngredients = dislikesIngredients;
+    }
 
     public static User findByName(String name) {
         return find("#User.findByName", name).firstResult();

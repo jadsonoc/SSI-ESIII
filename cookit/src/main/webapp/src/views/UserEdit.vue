@@ -31,7 +31,9 @@
             />
           </div>
           <div class="form-group py-2">
-            <label htmlFor="lactoseIntolerant">Lactose Intolerant or Alergic?</label>
+            <label htmlFor="lactoseIntolerant"
+              >Lactose Intolerant or Alergic?</label
+            >
             <label class="wrapper flex items-center">
               <input
                 v-model="user.lactoseIntolerant"
@@ -43,7 +45,9 @@
             </label>
           </div>
           <div class="form-group py-2">
-            <label htmlFor="glutenIntolerant">Gluten Intolerant or Alergic?</label>
+            <label htmlFor="glutenIntolerant"
+              >Gluten Intolerant or Alergic?</label
+            >
             <label class="wrapper flex items-center">
               <input
                 v-model="user.glutenIntolerant"
@@ -67,6 +71,28 @@
             </label>
           </div>
 
+          <label class="py-2">Select your dislikes:</label>
+          <div class="input-group">
+            <vue3-tags-input
+              v-model:tags="user.dislikesIngredients"
+              v-model="tag"
+              :select="true"
+              :select-items="foods"
+              class="form-control"
+              @on-select="handleSelectedTag"
+              @on-tags-changed="handleChangeTag"
+              placeholder="Select the Ingredients you don't like"
+            >
+              <template #item="{ tag }">
+                {{ tag.name }}
+              </template>
+              <template #no-data> No Data </template>
+              <template #select-item="tag">
+                {{ tag.name }}
+              </template>
+            </vue3-tags-input>
+          </div>
+
           <button
             @click="handleSave()"
             :disabled="isSaving"
@@ -86,29 +112,54 @@ import axios from "axios";
 import NavMenu from "../components/NavMenu.vue";
 import LayoutDiv from "../components/LayoutDiv.vue";
 import Swal from "sweetalert2";
+import Vue3TagsInput from "vue3-tags-input";
 
 export default {
   name: "UserEdit",
   components: {
     NavMenu,
     LayoutDiv,
+    Vue3TagsInput,
   },
   data() {
     return {
-      userId: '',
+      userId: "",
       user: {
-        name: '',
-        email: '',
+        name: "",
+        email: "",
         lactoseIntolerant: false,
         glutenIntolerant: false,
         oilseedsIntolerant: false,
         favouritedRecipes: [],
-        preparedRecipes: []
+        dislikesIngredients: [],
       },
+      tag: "",
+      tags: [],
+      selectedItems: [],
+      foods: [],
       isSaving: false,
     };
   },
   created() {
+    axios
+      .get("/foods")
+      .then((response) => {
+        let foodsInfo = response.data;
+        foodsInfo.forEach((element) => {
+          this.foods.push(element);
+        });
+        return response;
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "An Error Occured Recovering Food!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return error;
+      });
+
     this.userId = this.$route.params.id;
     axios
       .get(`/userManager/${this.userId}`)
@@ -120,7 +171,8 @@ export default {
         this.user.glutenIntolerant = userInfo.glutenIntolerant;
         this.user.oilseedsIntolerant = userInfo.oilseedsIntolerant;
         this.user.favouritedRecipes = userInfo.favouritedRecipes;
-        this.user.preparedRecipes = userInfo.preparedRecipes;
+        this.user.dislikesIngredients = userInfo.dislikesIngredients;
+        this.tags = this.user.dislikesIngredients;
         return response;
       })
       .catch((error) => {
@@ -136,8 +188,6 @@ export default {
   methods: {
     handleSave() {
       this.isSaving = true;
-      console.log(this.user)
-      console.log(this.userId)
       axios
         .put(`/userManager/${this.userId}`, this.user)
         .then((response) => {
@@ -148,6 +198,58 @@ export default {
             timer: 1500,
           });
           this.isSaving = false;
+          return response;
+        })
+        .catch((error) => {
+          this.isSaving = false;
+          Swal.fire({
+            icon: "error",
+            title: error + "An Error Occured!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return error;
+        });
+    },
+    handleSelectedTag(tag) {
+      axios
+        .put(`/userManager/dislikes/add/${this.userId}/${tag.id}`)
+        .then((response) => {
+          /*
+          Swal.fire({
+            icon: "success",
+            title: "Dislikes updated successfully!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          */
+          this.isSaving = false;
+          this.user.dislikesIngredients.push(tag);
+          this.tags.push(tag);
+          return response;
+        })
+        .catch((error) => {
+          this.isSaving = false;
+          Swal.fire({
+            icon: "error",
+            title: error + "An Error Occured!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return error;
+        });
+    },
+    handleChangeTag(tags) {
+      let uniqueTags = tags.filter((elem, pos, self) => {
+            return self.indexOf(elem) == pos;
+      });
+      let tagDiff = this.user.dislikesIngredients.filter((element) => !tags.includes(element)).shift();
+      axios
+        .put(`/userManager/dislikes/remove/${this.userId}/${tagDiff.id}`)
+        .then((response) => {
+          
+          this.user.dislikesIngredients = uniqueTags;
+          
           return response;
         })
         .catch((error) => {
