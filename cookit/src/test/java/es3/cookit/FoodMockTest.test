@@ -1,0 +1,42 @@
+package es3.cookit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import es3.cookit.controller.FoodController;
+import es3.cookit.entities.Food;
+import es3.cookit.services.FoodService;
+import io.quarkus.test.common.http.TestHTTPEndpoint;
+import io.quarkus.test.junit.QuarkusMock;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+
+@QuarkusTest
+@TestHTTPEndpoint(FoodController.class)
+public class FoodMockTest {
+
+    @Inject
+    FoodService foodService;
+
+    @BeforeEach
+    void setUp() {
+      Food mock = Mockito.mock(Food.class);
+      Mockito.when(mock.findById(1L))
+           .thenReturn(Arrays.stream(new Food[] {
+              new Food("Cebola", true, true, true, "un"),
+      new Food("Leite integral", false, true, true, "ml")}));
+      
+      QuarkusMock.installMockForType(mock, Food.class);
+    }
+
+    @Test
+    public void testWhenFindFoodByIdThenFoodShouldBeFound() {
+      assertEquals(2, foodService.listFoodById(1L));
+    }
+
+}

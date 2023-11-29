@@ -19,7 +19,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("foods")
+@Path("/foods")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class FoodController {
@@ -43,8 +43,7 @@ public class FoodController {
     }
 
     @GET
-    @Path("search/{query}")
-    @PermitAll
+    @Path("/search/{query}")
     public Response listFood(@PathParam("query") String searchQuery) {
         List <Food> foodFound = foodService.listFoodByQuery(searchQuery);
         return Response.ok(foodFound).build();

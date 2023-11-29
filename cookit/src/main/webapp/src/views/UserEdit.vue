@@ -105,6 +105,46 @@
       </div>
     </div>
   </layout-div>
+
+  <layout-div>
+
+      
+      <div class="card mt-3">
+        <div class="card-header">
+          <h4 class="text-center mt-2 mb-2">My Favourite Recipes</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Preparation</th>
+                <th>Time</th>
+                <th>Serve</th>
+                <th>Difficulty</th>
+                <th width="240px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="recipe in user.favouritedRecipes" :key="recipe.id">
+                <td>{{ recipe.name }}</td>
+                <td>{{ recipe.preparation }}</td>
+                <td>{{ recipe.time }}</td>
+                <td>{{ recipe.serve }}</td>
+                <td>{{ recipe.difficulty }}</td>
+                <td>
+                  <router-link
+                    :to="`/recipe/show/${recipe.id}`"
+                    class="btn btn-outline-info mx-1"
+                    >Show</router-link
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </layout-div>
 </template>
 
 <script>
