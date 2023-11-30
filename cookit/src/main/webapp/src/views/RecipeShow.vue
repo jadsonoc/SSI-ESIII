@@ -11,11 +11,12 @@
             </router-link>
           </div>
           <div v-if="isFavourited" class="col">
-            <button v-if="isLogged" @click="handleUnfavourite()" className="btn">
-              <i
-                class="fa fa-star fa-2x heavy"
-                aria-hidden="true"
-              ></i>
+            <button
+              v-if="isLogged"
+              @click="handleUnfavourite()"
+              className="btn"
+            >
+              <i class="fa fa-star fa-2x heavy" aria-hidden="true"></i>
             </button>
           </div>
           <div v-else class="col">
@@ -92,7 +93,7 @@ export default {
   watch: {
     isFavourited(newValue) {
       this.isFavourited = newValue;
-    }
+    },
   },
   created() {
     if (VueCookies.isKey("userId")) {
@@ -120,22 +121,24 @@ export default {
         });
         return error;
       });
-    const userId = VueCookies.get("userId");
-    axios
-      .get(`/userManager/isFavourite/${userId}/${recipeId}`)
-      .then((response) => {
-        this.isFavourited = response.data;
-        return response;
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "An Error Occured Getting Favourites Recipes!",
-          showConfirmButton: false,
-          timer: 1500,
+    if (this.isLogged) {
+      const userId = VueCookies.get("userId");
+      axios
+        .get(`/userManager/isFavourite/${userId}/${recipeId}`)
+        .then((response) => {
+          this.isFavourited = response.data;
+          return response;
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "An Error Occured Getting Favourites Recipes!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          return error;
         });
-        return error;
-      });
+    }
   },
   methods: {
     handleFavourite() {
