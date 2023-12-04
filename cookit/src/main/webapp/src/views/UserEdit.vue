@@ -265,7 +265,7 @@ export default {
           */
           this.isSaving = false;
           this.user.dislikesIngredients.push(tag);
-          this.tags.push(tag);
+          //this.tags.push(tag);
           return response;
         })
         .catch((error) => {

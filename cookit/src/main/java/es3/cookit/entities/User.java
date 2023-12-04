@@ -3,6 +3,7 @@ package es3.cookit.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -41,10 +42,10 @@ public class User extends PanacheEntity {
     @Column
     private Date lastLogin;
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany (targetEntity = Recipe.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Recipe> favouritedRecipes = new ArrayList<>();
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany (targetEntity = Food.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Food> dislikesIngredients = new ArrayList<>();
 
     public User() {

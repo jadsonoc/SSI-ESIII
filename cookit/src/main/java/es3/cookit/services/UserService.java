@@ -50,6 +50,8 @@ public class UserService {
         } else {
             user.setEmail(dto.getEmail());
             user.setName(dto.getName());
+            //user.setFavouritedRecipes(dto.getFavouritedRecipes());
+            //user.setDislikesIngredients(dto.getDislikesIngredients());
         }
         user.setLastLogin(new java.sql.Date(new java.util.Date().getTime()));
         user.persist();

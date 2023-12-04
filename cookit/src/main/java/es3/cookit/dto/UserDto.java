@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import es3.cookit.entities.Food;
 import es3.cookit.entities.Ingredient;
 import es3.cookit.entities.Recipe;
 
@@ -23,7 +24,7 @@ public class UserDto {
 
     private List<Recipe> favouritedRecipes = new ArrayList<>();
 
-    private List<Ingredient> dislikesIngredients = new ArrayList<>();
+    private List<Food> dislikesIngredients = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -81,11 +82,11 @@ public class UserDto {
         this.favouritedRecipes = favouritedRecipes;
     }
 
-    public List<Ingredient> getDislikesIngredients() {
+    public List<Food> getDislikesIngredients() {
         return dislikesIngredients;
     }
 
-    public void setDislikesIngredients(List<Ingredient> dislikesIngredients) {
+    public void setDislikesIngredients(List<Food> dislikesIngredients) {
         this.dislikesIngredients = dislikesIngredients;
     }
 

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
     <a class="navbar-brand" href="/">
       <img src="../assets/img/logo2_mini_bg.png" alt="" width="90" height="30" />
     </a>
