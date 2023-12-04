@@ -2,7 +2,7 @@
   <NavMenu />
 
   <div class="d-flex align-content-center flex-wrap">
-    <div class="container-fluid pt-5 my-5">
+    <div class="container-fluid pt-5 my-5 mx-5 px-5">
       <img
         src="../assets/img/logo2.png"
         class="img-fluid rounded mx-auto d-block"
@@ -41,11 +41,16 @@
   </div>
 
   <!-- INICIO CARD DECK -->
-
+  <CardGrid />
   <!-- FIM CARD DECK -->
+
+  <FooterComponent />
+
 </template>
 
 <script>
+import FooterComponent from "./FooterComponent.vue"
+import CardGrid from "./CardGrid.vue";
 import NavMenu from "./NavMenu.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -57,6 +62,8 @@ export default {
   components: {
     NavMenu,
     Vue3TagsInput,
+    CardGrid,
+    FooterComponent,
   },
   data() {
     return {

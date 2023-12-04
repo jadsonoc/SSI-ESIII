@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">
-      <img src="../assets/img/logo2_mini.png" alt="" width="90" height="30" />
+      <img src="../assets/img/logo2_mini_bg.png" alt="" width="90" height="30" />
     </a>
     <div
       class="collapse navbar-collapse d-flex flex-row-reverse"
