@@ -111,7 +111,7 @@ export default {
         oilseedFree: false,
         foodUnit: "",
       },
-      unities: ["g", "Kg", "ml", "L", "un", "tbs", "fatia"],
+      unities: ["g", "Kg", "ml", "L", "un", "tbs", "fatia", "q.b."],
       isSaving: false,
     };
   },
