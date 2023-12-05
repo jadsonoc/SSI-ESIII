@@ -53,7 +53,7 @@ public class FoodTest {
                 .body("oilseedFree", hasItem(true))
           .body("foodUnit", hasItem("un"));
     }
-/* 
+
     @Test
     void testWhenGetFoodByNameThenFoodShouldBeFound() {
 
@@ -63,5 +63,5 @@ public class FoodTest {
 
         verify(foodService).listFoodByQuery("tom");
     }
-    */
+    
 }

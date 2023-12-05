@@ -26,6 +26,14 @@ jobs:
             java-version: '17'
             distribution: 'temurin'
             cache: maven
+        - name: Run Docker 
+          uses: addnab/docker-run-action@v3
+          with:
+            image: quay.io/keycloak/keycloak:22.0.4
+        - name: Run Docker Mysql
+          uses: addnab/docker-run-action@v3
+          with:
+            image: mysql:latest
         - name: Build with Maven
           run: mvn -B package --file /home/runner/work/SSI-ESIII/SSI-ESIII/cookit/pom.xml
         - name: Test with Quarkus
