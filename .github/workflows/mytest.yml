@@ -34,5 +34,6 @@ jobs:
           uses: addnab/docker-run-action@v3
           with:
             image: mysql:latest
-        - name: Test with Quarkus
-          run: ./home/runner/work/SSI-ESIII/SSI-ESIII/cookit/mvnw quarkus:dev
+        - name: Build with Maven
+          run: mvn -B package --file /home/runner/work/SSI-ESIII/SSI-ESIII/cookit/pom.xml
+       
