@@ -34,6 +34,13 @@ jobs:
           uses: addnab/docker-run-action@v3
           with:
             image: mysql:latest
+        - name: Cache Maven packages
+          uses: actions/cache@v2
+          with:
+            path: ~/.m2
+            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+            restore-keys: ${{ runner.os }}-m2
         - name: Build with Maven
           run: mvn -B package --file /home/runner/work/SSI-ESIII/SSI-ESIII/cookit/pom.xml
-       
+        - name: Test with Quarkus
+          run: ./mvnw quarkus:test
