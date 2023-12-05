@@ -35,4 +35,4 @@ jobs:
           with:
             image: mysql:latest
         - name: Test with Quarkus
-          run: ./mvnw quarkus:dev
+          run: ./home/runner/work/SSI-ESIII/SSI-ESIII/cookit/mvnw quarkus:dev
